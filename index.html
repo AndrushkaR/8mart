@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>С праздником, родная! 💜</title>
 
+  <!-- Preload ВСЕХ фото заранее -->
+  <link rel="preload" as="image" href="photo1.jpg">
+  <link rel="preload" as="image" href="photo2.jpg">
+  <link rel="preload" as="image" href="photo3.jpg">
+  <link rel="preload" as="image" href="photo-heart.jpg">
+  <link rel="preload" as="image" href="gif2.gif">
+
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body, html {
@@ -81,7 +88,7 @@
       transition:opacity 1.6s;
     }
 
-    /* Слайдер вместо открытки */
+    /* Слайдер фото */
     #photos-section {
       position:fixed;
       inset:0;
@@ -89,6 +96,7 @@
       align-items:center;
       justify-content:center;
       z-index:3;
+      background:rgba(0,0,0,0.9);
     }
     #photos-section.active { display:flex; }
 
@@ -105,11 +113,16 @@
     .slide {
       position:absolute;
       inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
       opacity:0;
       transition:opacity 1.2s ease;
-      object-fit:cover;
     }
-    .slide.active { opacity:1; z-index:2; }
+    .slide.active {
+      opacity:1;
+      z-index:10;
+    }
 
     .slider-controls {
       position:absolute;
@@ -118,7 +131,7 @@
       transform:translateX(-50%);
       display:flex;
       gap:12px;
-      z-index:10;
+      z-index:20;
     }
     .dot {
       width:12px;
@@ -126,6 +139,7 @@
       background:rgba(255,255,255,0.4);
       border-radius:50%;
       transition:all 0.4s;
+      cursor:pointer;
     }
     .dot.active {
       background:#d500ff;
@@ -242,21 +256,21 @@
     <div class="phrase" id="w2">Праздником</div>
     <div class="phrase" id="w3">Родная</div>
     <div class="phrase" id="w4"><span class="big-heart">❤️</span></div>
-    <img id="gif2" src="gif2.gif" alt="поздравление">
+    <img id="gif2" src="gif2.gif" alt="поздравление" loading="eager">
   </section>
 
   <!-- Слайдер фото -->
   <div id="photos-section">
     <div class="slider" id="slider">
-      <img class="slide" src="photo1.jpg" alt="">
-      <img class="slide" src="photo2.jpg" alt="">
-      <img class="slide" src="photo3.jpg" alt="">
+      <img class="slide" src="photo1.jpg" alt="" loading="eager">
+      <img class="slide" src="photo2.jpg" alt="" loading="eager">
+      <img class="slide" src="photo3.jpg" alt="" loading="eager">
     </div>
     <div class="slider-controls" id="dots"></div>
   </div>
 
   <div id="final-heart-container">
-    <img id="final-heart" src="photo-heart.jpg" alt="сердце">
+    <img id="final-heart" src="photo-heart.jpg" alt="сердце" loading="eager">
     <div id="congrats-text">С праздником!!!</div>
   </div>
 
@@ -373,8 +387,10 @@ function createDots() {
 }
 
 function goToSlide(n) {
-  slides.forEach(s => s.classList.remove('active'));
-  slides[n].classList.add('active');
+  slides.forEach((s, i) => {
+    s.classList.toggle('active', i === n);
+    s.style.zIndex = i === n ? 10 : 1;
+  });
   document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===n));
   currentSlide = n;
 }
@@ -387,8 +403,11 @@ function nextSlide() {
 function startPhotoSlider() {
   document.getElementById('photos-section').classList.add('active');
   createDots();
-  goToSlide(0);
-  slideInterval = setInterval(nextSlide, 3500);
+  // Даём время на подгрузку фото
+  setTimeout(() => {
+    goToSlide(0);
+    slideInterval = setInterval(nextSlide, 3500);
+  }, 800);
 }
 
 // Сердечко
@@ -421,7 +440,7 @@ startBtn.addEventListener('click', () => {
   countdown();
 });
 
-// Дополнительный клик по странице — для музыки
+// Дополнительный клик — для музыки
 document.body.addEventListener('click', () => {
   if (music.paused || music.muted) {
     music.muted = false;

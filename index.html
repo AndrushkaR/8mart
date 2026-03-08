@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>С праздником, родная! 💜</title>
 
-  <!-- Preload ТОЛЬКО того, что используется сразу (убираем предупреждения) -->
+  <!-- Preload только того, что используется сразу (убираем предупреждения) -->
   <link rel="preload" as="image" href="gif2.gif">
   <link rel="preload" as="image" href="photo1.jpg">
   <link rel="preload" as="image" href="photo-heart.jpg">
@@ -398,24 +398,32 @@ show = function(idx) {
 const music = document.getElementById('bg-music');
 music.volume = 0.3;
 
+// Функция включения звука
+function enableMusic() {
+  if (music.muted) {
+    music.muted = false;
+    music.play().catch(e => console.log('Воспроизведение после клика:', e));
+  }
+  // Удаляем слушатели
+  document.body.removeEventListener('touchstart', enableMusic);
+  document.body.removeEventListener('click', enableMusic);
+}
+
 // Запуск
 window.addEventListener('load', () => {
   countdown();
+  // Пытаемся запустить muted сразу (часто разрешается)
   music.play().catch(() => {
-    console.log('Автозапуск музыки заблокирован — ждём клика');
+    console.log('Автоплей muted заблокирован — ждём взаимодействия');
   });
 });
 
-// Включаем звук после первого взаимодействия (touch или click)
-const enableAudio = () => {
-  music.muted = false;
-  music.play().catch(e => console.log('Play after interaction failed:', e));
-  document.body.removeEventListener('touchstart', enableAudio);
-  document.body.removeEventListener('click', enableAudio);
-};
+// Включаем звук после первого касания/клика
+document.body.addEventListener('touchstart', enableMusic, { once: true });
+document.body.addEventListener('click', enableMusic, { once: true });
 
-document.body.addEventListener('touchstart', enableAudio, { once: true });
-document.body.addEventListener('click', enableAudio, { once: true });
+// Гарантированно включаем при открытии открытки
+btnOpen.addEventListener('click', enableMusic);
 </script>
 </body>
 </html>

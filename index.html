@@ -29,38 +29,53 @@
     section.active { opacity:1; pointer-events:all; }
 
     /* 1. Переверни телефон */
-    #scene1 #hint {
+    #s1 #hint {
       font-size:6vw;
       text-align:center;
       line-height:1.4;
       padding:0 10vw;
       animation:pulse 2.5s infinite;
     }
-    #scene1 img { max-width:70vw; max-height:35vh; margin:40px 0; }
+    #s1 img { max-width:70vw; max-height:35vh; margin:40px 0; }
     @keyframes pulse { 0%,100%{opacity:0.7} 50%{opacity:1} }
 
-    /* 2. Matrix-дождь */
-    #scene2 { background:#000; }
-    .rain { position:absolute; inset:0; overflow:hidden; }
+    /* 2. Matrix-дождь (исправленный) */
+    #s2 { background:#000; }
+    .rain {
+      position:absolute;
+      inset:0;
+      overflow:hidden;
+    }
     .col {
       position:absolute;
-      top:-120%;
-      font-family:'Courier New',monospace;
-      font-size:1.2rem;
-      line-height:1.15;
+      top:-120vh;
+      font-family:'Courier New', Consolas, monospace;
+      font-size:1.15rem;
+      line-height:1.05;
       color:#c300ff;
-      text-shadow:0 0 12px #c300ff99, 0 0 24px #c300ff55;
+      text-shadow:0 0 10px #c300ff99, 0 0 20px #c300ff55;
       white-space:pre;
-      writing-mode:vertical-rl;
-      text-orientation:upright;
       animation:fall linear infinite;
     }
-    .lead { color:#fff; text-shadow:0 0 18px #fff, 0 0 35px #c300ff; font-weight:bold; }
-    .fade { opacity:0.35; }
-    @keyframes fall { 0%{transform:translateY(-120%)} 100%{transform:translateY(130vh)} }
+    .lead {
+      color:#ffffff;
+      text-shadow:0 0 15px #fff, 0 0 30px #c300ff;
+      font-weight:bold;
+    }
+    .fade { opacity:0.4; }
+    @keyframes fall {
+      0%   { transform:translateY(-120%); }
+      100% { transform:translateY(140vh); }
+    }
 
     /* 3. Отсчёт */
-    #count { font-size:28vw; font-weight:900; color:#d500ff; text-shadow:0 0 50px #d500ff, 0 0 100px #d500ff66; letter-spacing:-8px; }
+    #count {
+      font-size:28vw;
+      font-weight:900;
+      color:#d500ff;
+      text-shadow:0 0 50px #d500ff, 0 0 100px #d500ff66;
+      letter-spacing:-8px;
+    }
 
     /* 4. Слова */
     .word {
@@ -77,7 +92,7 @@
     @keyframes beat { 0%,100%{transform:scale(1)} 50%{transform:scale(1.18)} }
     #gif2 { max-width:70vw; margin-top:40px; opacity:0; transition:opacity 1.2s; }
 
-    /* 5. Открытка */
+    /* 5. Открытка + финал */
     #card-wrap {
       width:90vw;
       max-width:380px;
@@ -135,25 +150,25 @@
     }
     #final.show { opacity:1; transform:scale(1); }
 
-    #swipe { position:fixed; inset:0; z-index:999; touch-action:pan-y; }
+    #swipe-zone { position:fixed; inset:0; z-index:999; touch-action:pan-y; }
   </style>
 </head>
 <body>
 
-  <section id="scene1" class="active">
+  <section id="s1" class="active">
     <div id="hint">Переверни телефон<br>горизонтально 😍</div>
     <img src="gif1.gif" alt="поворот">
   </section>
 
-  <section id="scene2">
+  <section id="s2">
     <div class="rain"></div>
   </section>
 
-  <section id="scene3">
+  <section id="s3">
     <div id="count">3</div>
   </section>
 
-  <section id="scene4">
+  <section id="s4">
     <div class="word" id="w1">С</div>
     <div class="word" id="w2">Праздником</div>
     <div class="word" id="w3">Родная</div>
@@ -161,7 +176,7 @@
     <img id="gif2" src="gif2.gif" alt="поздравление">
   </section>
 
-  <section id="scene5">
+  <section id="s5">
     <div id="card-wrap">
       <div id="card">
         <div class="face front">Открытка</div>
@@ -174,134 +189,168 @@
     <img id="final" src="photo-heart.jpg" alt="сердце">
   </section>
 
-  <div id="swipe"></div>
+  <div id="swipe-zone"></div>
 
 <script>
-let scene = 1;
-const secs = document.querySelectorAll('section');
+let current = 1;
+const sections = document.querySelectorAll('section');
 
-function show(n){
-  secs.forEach(s=>s.classList.remove('active'));
-  if(secs[n-1]) secs[n-1].classList.add('active');
-  scene = n;
+function show(n) {
+  sections.forEach(s => s.classList.remove('active'));
+  if (sections[n-1]) sections[n-1].classList.add('active');
+  current = n;
 }
 
-let startY = 0;
-document.getElementById('swipe').addEventListener('touchstart', e=> startY = e.touches[0].clientY, {passive:true});
-document.getElementById('swipe').addEventListener('touchend', e=>{
-  let d = startY - e.changedTouches[0].clientY;
-  if(Math.abs(d)>70){
-    if(d>0) next();
-    else if(scene===5) back();
-  }
-}, {passive:true});
+let touchStart = 0;
+const swipe = document.getElementById('swipe-zone');
 
-function next(){
-  if(scene===1){
+swipe.addEventListener('touchstart', e => {
+  touchStart = e.touches[0].clientY;
+}, {passive: true});
+
+swipe.addEventListener('touchend', e => {
+  const diff = touchStart - e.changedTouches[0].clientY;
+  if (Math.abs(diff) > 70) {
+    if (diff > 0) nextStep();
+    else if (current === 5) prevStep();
+  }
+}, {passive: true});
+
+function nextStep() {
+  if (current === 1) {
     show(2);
-    rain();
-    setTimeout(()=>show(3), 6000);
-    setTimeout(countdown, 6500);
+    startRain();
+    setTimeout(() => show(3), 6500);
+    setTimeout(startCountdown, 7000);
   }
 }
 
-function back(){
-  if(scene===5){
+function prevStep() {
+  if (current === 5) {
     card.classList.remove('flip');
     card.style.transform = 'rotateY(0deg)';
-    setTimeout(()=>document.getElementById('final').classList.remove('show'), 1000);
+    setTimeout(() => document.getElementById('final').classList.remove('show'), 1000);
   }
 }
 
-// Дождь
-function rain(){
-  const c = document.querySelector('#scene2 .rain');
-  c.innerHTML = '';
-  const msgs = ["С праздником!!!","С пРаЗдНиКом!!!","С  П Р А З Д Н И К О М !!!","С праздником ❤️"];
-  const cols = Math.floor(window.innerWidth/18)+12;
+// ─── Дождь ───────────────────────────────────────────────
+function startRain() {
+  const rainContainer = document.querySelector('#s2 .rain');
+  rainContainer.innerHTML = '';
 
-  for(let i=0;i<cols;i++){
-    let col = document.createElement('div');
-    col.className = 'col';
-    col.style.left = `${i*2.3}vw`;
-    col.style.animationDuration = `${9+Math.random()*14}s`;
-    col.style.animationDelay = `${Math.random()*6}s`;
+  const russianChars = 'СПРАЗДНИКОМ!!!❤️💜ЛЮБЛЮТЕБЯСЧАСТЬЯЗДОРОВЬЯ!!!';
 
-    let t='', l=35+Math.floor(Math.random()*45);
-    for(let j=0;j<l;j++){
-      if(j===0) t += '<span class="lead">'+rnd()+'</span>';
-      else if(j<6) t += '<span>'+rnd()+'</span>';
-      else t += '<span class="fade">'+rnd()+'</span>';
+  const columns = Math.floor(window.innerWidth / 18) + 14;
+
+  for (let i = 0; i < columns; i++) {
+    const column = document.createElement('div');
+    column.className = 'col';
+    column.style.left = `${i * 3.2}vw`;
+    column.style.animationDuration = `${10 + Math.random() * 15}s`;
+    column.style.animationDelay = `-${Math.random() * 10}s`;
+
+    let content = '';
+    const streamLength = 25 + Math.floor(Math.random() * 45);
+
+    for (let j = 0; j < streamLength; j++) {
+      const char = russianChars[Math.floor(Math.random() * russianChars.length)];
+      if (j === 0) {
+        content += `<span class="lead">${char}</span>`;
+      } else if (j < 6) {
+        content += `<span>${char}</span>`;
+      } else {
+        content += `<span class="fade">${char}</span>`;
+      }
     }
-    if(Math.random()<0.3){
-      let m = msgs[Math.floor(Math.random()*msgs.length)];
-      let p = Math.floor(Math.random()*(l - m.length/2));
-      t = t.substring(0,p*2) + m + t.substring(p*2 + m.length*2);
+
+    // Добавляем читаемую фразу иногда
+    if (Math.random() < 0.4) {
+      const phrase = 'С П Р А З Д Н И К О М !!!';
+      const pos = Math.floor(Math.random() * (streamLength - 12));
+      const before = content.substring(0, pos * 20);
+      const after = content.substring((pos + phrase.length) * 20);
+      content = before + phrase + after;
     }
-    col.innerHTML = t;
-    c.appendChild(col);
+
+    column.innerHTML = content;
+    rainContainer.appendChild(column);
   }
-  if(scene===2) setTimeout(rain,18000);
-}
-function rnd(){
-  let s = "С П Р А З Д Н И К О М ! ! ! ♥ 01абвгдеёжзийклмнопрстуфхцчшщъыьэюяABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  return s[Math.floor(Math.random()*s.length)];
+
+  // Повторяем дождь, пока на этой сцене
+  if (current === 2) {
+    setTimeout(startRain, 22000);
+  }
 }
 
-// Отсчёт
-function countdown(){
-  let el = document.getElementById('count'), n=3;
-  let t = setInterval(()=>{
-    n--; el.textContent=n;
-    if(n<=0){
-      clearInterval(t);
-      setTimeout(()=>{
+// ─── Отсчёт ───────────────────────────────────────────────
+function startCountdown() {
+  const el = document.getElementById('count');
+  let num = 3;
+  el.textContent = num;
+
+  const timer = setInterval(() => {
+    num--;
+    el.textContent = num;
+    if (num <= 0) {
+      clearInterval(timer);
+      setTimeout(() => {
         show(4);
-        words();
-      },900);
+        showWords();
+      }, 1000);
     }
-  },1300);
-  el.textContent=3;
+  }, 1400);
 }
 
-// Слова
-function words(){
-  let ws = [document.getElementById('w1'),document.getElementById('w2'),document.getElementById('w3'),document.getElementById('w4')];
-  let i=0;
-  let iv = setInterval(()=>{
-    if(i>0) ws[i-1].classList.remove('show');
-    if(i<ws.length){
-      ws[i].classList.add('show');
-      i++;
+// ─── Появление слов ───────────────────────────────────────
+function showWords() {
+  const words = [
+    document.getElementById('w1'),
+    document.getElementById('w2'),
+    document.getElementById('w3'),
+    document.getElementById('w4')
+  ];
+
+  let idx = 0;
+  const interval = setInterval(() => {
+    if (idx > 0) words[idx - 1].classList.remove('show');
+    if (idx < words.length) {
+      words[idx].classList.add('show');
+      idx++;
     } else {
-      clearInterval(iv);
-      setTimeout(()=>document.getElementById('gif2').style.opacity='1',1600);
-      setTimeout(()=>show(5),5000);
+      clearInterval(interval);
+      setTimeout(() => {
+        document.getElementById('gif2').style.opacity = '1';
+      }, 1800);
+      setTimeout(() => show(5), 5200);
     }
-  },2000);
+  }, 2200);
 }
 
-// Открытка
+// ─── Открытка ─────────────────────────────────────────────
 const card = document.getElementById('card');
-card.addEventListener('click',()=>{
+card.addEventListener('click', () => {
   card.classList.toggle('flip');
-  card.style.transform = card.classList.contains('flip') ? 'rotateY(180deg)' : 'rotateY(0deg)';
+  card.style.transform = card.classList.contains('flip')
+    ? 'rotateY(180deg)'
+    : 'rotateY(0deg)';
 });
 
-// Финал после свайпа на открытой открытке
-document.getElementById('swipe').addEventListener('touchend',e=>{
-  if(scene!==5) return;
-  let d = startY - e.changedTouches[0].clientY;
-  if(d>90 && card.classList.contains('flip')){
+// ─── Финальное сердце после свайпа вверх на открытой открытке ───
+swipe.addEventListener('touchend', e => {
+  if (current !== 5) return;
+  const diff = touchStart - e.changedTouches[0].clientY;
+  if (diff > 100 && card.classList.contains('flip')) {
     card.classList.remove('flip');
     card.style.transform = 'rotateY(0deg)';
-    setTimeout(()=>document.getElementById('final').classList.add('show'),1100);
+    setTimeout(() => {
+      document.getElementById('final').classList.add('show');
+    }, 1200);
   }
 });
 
-// Опционально: если телефон уже горизонтальный — сразу пропустить первую сцену
-if(window.innerWidth > window.innerHeight){
-  next();
+// Если уже в горизонтальном положении — пропустить первую сцену
+if (window.innerWidth > window.innerHeight) {
+  nextStep();
 }
 </script>
 </body>

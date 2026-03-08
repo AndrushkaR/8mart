@@ -1,14 +1,308 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Тест</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>С праздником, родная! 💜</title>
   <style>
-    body { background: #000; color: #0f0; font-family: monospace; }
-    h1 { text-align: center; margin-top: 40vh; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body, html {
+      height:100%;
+      font-family:system-ui, sans-serif;
+      background:#000;
+      color:#fff;
+      overflow:hidden;
+      touch-action:manipulation;
+    }
+
+    section {
+      position:fixed;
+      inset:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity 0.8s ease;
+    }
+    section.active { opacity:1; pointer-events:all; }
+
+    /* 1. Переверни телефон */
+    #scene1 #hint {
+      font-size:6vw;
+      text-align:center;
+      line-height:1.4;
+      padding:0 10vw;
+      animation:pulse 2.5s infinite;
+    }
+    #scene1 img { max-width:70vw; max-height:35vh; margin:40px 0; }
+    @keyframes pulse { 0%,100%{opacity:0.7} 50%{opacity:1} }
+
+    /* 2. Matrix-дождь */
+    #scene2 { background:#000; }
+    .rain { position:absolute; inset:0; overflow:hidden; }
+    .col {
+      position:absolute;
+      top:-120%;
+      font-family:'Courier New',monospace;
+      font-size:1.2rem;
+      line-height:1.15;
+      color:#c300ff;
+      text-shadow:0 0 12px #c300ff99, 0 0 24px #c300ff55;
+      white-space:pre;
+      writing-mode:vertical-rl;
+      text-orientation:upright;
+      animation:fall linear infinite;
+    }
+    .lead { color:#fff; text-shadow:0 0 18px #fff, 0 0 35px #c300ff; font-weight:bold; }
+    .fade { opacity:0.35; }
+    @keyframes fall { 0%{transform:translateY(-120%)} 100%{transform:translateY(130vh)} }
+
+    /* 3. Отсчёт */
+    #count { font-size:28vw; font-weight:900; color:#d500ff; text-shadow:0 0 50px #d500ff, 0 0 100px #d500ff66; letter-spacing:-8px; }
+
+    /* 4. Слова */
+    .word {
+      font-size:12vw;
+      font-weight:bold;
+      margin:15px 0;
+      opacity:0;
+      transform:scale(0.5);
+      transition:all 1.3s ease-out;
+      text-shadow:0 0 30px currentColor;
+    }
+    .word.show { opacity:1; transform:scale(1); }
+    .big-heart { font-size:20vw; color:#d500ff; animation:beat 1.5s infinite; }
+    @keyframes beat { 0%,100%{transform:scale(1)} 50%{transform:scale(1.18)} }
+    #gif2 { max-width:70vw; margin-top:40px; opacity:0; transition:opacity 1.2s; }
+
+    /* 5. Открытка */
+    #card-wrap {
+      width:90vw;
+      max-width:380px;
+      height:70vh;
+      max-height:520px;
+      perspective:1400px;
+    }
+    #card {
+      width:100%; height:100%;
+      position:relative;
+      transform-style:preserve-3d;
+      transition:transform 1.6s cubic-bezier(0.68,-0.4,0.265,1.4);
+    }
+    .face {
+      position:absolute;
+      inset:0;
+      backface-visibility:hidden;
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 12px 50px #000c;
+    }
+    .front {
+      background:linear-gradient(135deg,#2a0047,#6000a8);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:11vw;
+      font-weight:bold;
+      color:#ffccff;
+      text-shadow:0 0 25px #fff8;
+    }
+    .back { transform:rotateY(180deg); background:#111; }
+    .back img { width:100%; height:100%; object-fit:cover; }
+    .bubble {
+      position:absolute;
+      top:10%; left:8%; right:8%;
+      background:rgba(255,255,255,0.95);
+      color:#1a0033;
+      padding:16px 20px;
+      border-radius:18px;
+      font-size:4.8vw;
+      line-height:1.4;
+      box-shadow:0 5px 20px #0009;
+      pointer-events:none;
+    }
+
+    #final {
+      width:80vw; max-width:360px;
+      height:80vw; max-height:360px;
+      border-radius:50%;
+      object-fit:cover;
+      box-shadow:0 0 70px #d500ff99, 0 0 140px #d500ff55;
+      opacity:0; transform:scale(0.2);
+      transition:all 2s ease-out;
+    }
+    #final.show { opacity:1; transform:scale(1); }
+
+    #swipe { position:fixed; inset:0; z-index:999; touch-action:pan-y; }
   </style>
 </head>
 <body>
-  <h1>Если ты видишь зелёный текст — всё работает!</h1>
+
+  <section id="scene1" class="active">
+    <div id="hint">Переверни телефон<br>горизонтально 😍</div>
+    <img src="gif1.gif" alt="поворот">
+  </section>
+
+  <section id="scene2">
+    <div class="rain"></div>
+  </section>
+
+  <section id="scene3">
+    <div id="count">3</div>
+  </section>
+
+  <section id="scene4">
+    <div class="word" id="w1">С</div>
+    <div class="word" id="w2">Праздником</div>
+    <div class="word" id="w3">Родная</div>
+    <div class="word" id="w4"><span class="big-heart">❤️</span></div>
+    <img id="gif2" src="gif2.gif" alt="поздравление">
+  </section>
+
+  <section id="scene5">
+    <div id="card-wrap">
+      <div id="card">
+        <div class="face front">Открытка</div>
+        <div class="face back">
+          <img src="photo1.jpg" alt="фото">
+          <div class="bubble">Люблю тебя безумно! 💜</div>
+        </div>
+      </div>
+    </div>
+    <img id="final" src="photo-heart.jpg" alt="сердце">
+  </section>
+
+  <div id="swipe"></div>
+
+<script>
+let scene = 1;
+const secs = document.querySelectorAll('section');
+
+function show(n){
+  secs.forEach(s=>s.classList.remove('active'));
+  if(secs[n-1]) secs[n-1].classList.add('active');
+  scene = n;
+}
+
+let startY = 0;
+document.getElementById('swipe').addEventListener('touchstart', e=> startY = e.touches[0].clientY, {passive:true});
+document.getElementById('swipe').addEventListener('touchend', e=>{
+  let d = startY - e.changedTouches[0].clientY;
+  if(Math.abs(d)>70){
+    if(d>0) next();
+    else if(scene===5) back();
+  }
+}, {passive:true});
+
+function next(){
+  if(scene===1){
+    show(2);
+    rain();
+    setTimeout(()=>show(3), 6000);
+    setTimeout(countdown, 6500);
+  }
+}
+
+function back(){
+  if(scene===5){
+    card.classList.remove('flip');
+    card.style.transform = 'rotateY(0deg)';
+    setTimeout(()=>document.getElementById('final').classList.remove('show'), 1000);
+  }
+}
+
+// Дождь
+function rain(){
+  const c = document.querySelector('#scene2 .rain');
+  c.innerHTML = '';
+  const msgs = ["С праздником!!!","С пРаЗдНиКом!!!","С  П Р А З Д Н И К О М !!!","С праздником ❤️"];
+  const cols = Math.floor(window.innerWidth/18)+12;
+
+  for(let i=0;i<cols;i++){
+    let col = document.createElement('div');
+    col.className = 'col';
+    col.style.left = `${i*2.3}vw`;
+    col.style.animationDuration = `${9+Math.random()*14}s`;
+    col.style.animationDelay = `${Math.random()*6}s`;
+
+    let t='', l=35+Math.floor(Math.random()*45);
+    for(let j=0;j<l;j++){
+      if(j===0) t += '<span class="lead">'+rnd()+'</span>';
+      else if(j<6) t += '<span>'+rnd()+'</span>';
+      else t += '<span class="fade">'+rnd()+'</span>';
+    }
+    if(Math.random()<0.3){
+      let m = msgs[Math.floor(Math.random()*msgs.length)];
+      let p = Math.floor(Math.random()*(l - m.length/2));
+      t = t.substring(0,p*2) + m + t.substring(p*2 + m.length*2);
+    }
+    col.innerHTML = t;
+    c.appendChild(col);
+  }
+  if(scene===2) setTimeout(rain,18000);
+}
+function rnd(){
+  let s = "С П Р А З Д Н И К О М ! ! ! ♥ 01абвгдеёжзийклмнопрстуфхцчшщъыьэюяABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  return s[Math.floor(Math.random()*s.length)];
+}
+
+// Отсчёт
+function countdown(){
+  let el = document.getElementById('count'), n=3;
+  let t = setInterval(()=>{
+    n--; el.textContent=n;
+    if(n<=0){
+      clearInterval(t);
+      setTimeout(()=>{
+        show(4);
+        words();
+      },900);
+    }
+  },1300);
+  el.textContent=3;
+}
+
+// Слова
+function words(){
+  let ws = [document.getElementById('w1'),document.getElementById('w2'),document.getElementById('w3'),document.getElementById('w4')];
+  let i=0;
+  let iv = setInterval(()=>{
+    if(i>0) ws[i-1].classList.remove('show');
+    if(i<ws.length){
+      ws[i].classList.add('show');
+      i++;
+    } else {
+      clearInterval(iv);
+      setTimeout(()=>document.getElementById('gif2').style.opacity='1',1600);
+      setTimeout(()=>show(5),5000);
+    }
+  },2000);
+}
+
+// Открытка
+const card = document.getElementById('card');
+card.addEventListener('click',()=>{
+  card.classList.toggle('flip');
+  card.style.transform = card.classList.contains('flip') ? 'rotateY(180deg)' : 'rotateY(0deg)';
+});
+
+// Финал после свайпа на открытой открытке
+document.getElementById('swipe').addEventListener('touchend',e=>{
+  if(scene!==5) return;
+  let d = startY - e.changedTouches[0].clientY;
+  if(d>90 && card.classList.contains('flip')){
+    card.classList.remove('flip');
+    card.style.transform = 'rotateY(0deg)';
+    setTimeout(()=>document.getElementById('final').classList.add('show'),1100);
+  }
+});
+
+// Опционально: если телефон уже горизонтальный — сразу пропустить первую сцену
+if(window.innerWidth > window.innerHeight){
+  next();
+}
+</script>
 </body>
 </html>

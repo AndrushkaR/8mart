@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>С праздником, родная! 💜</title>
 
-  <!-- Preload ВСЕХ фото заранее -->
+  <!-- Preload ВСЕХ изображений, чтобы точно загрузились -->
+  <link rel="preload" as="image" href="gif2.gif">
   <link rel="preload" as="image" href="photo1.jpg">
   <link rel="preload" as="image" href="photo2.jpg">
   <link rel="preload" as="image" href="photo3.jpg">
   <link rel="preload" as="image" href="photo-heart.jpg">
-  <link rel="preload" as="image" href="gif2.gif">
 
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -87,8 +87,7 @@
       opacity:0;
       transition:opacity 1.6s;
     }
-
-    /* Слайдер фото */
+    /* Слайдер вместо открытки */
     #photos-section {
       position:fixed;
       inset:0;
@@ -96,10 +95,8 @@
       align-items:center;
       justify-content:center;
       z-index:3;
-      background:rgba(0,0,0,0.9);
     }
     #photos-section.active { display:flex; }
-
     .slider {
       width:92vw;
       max-width:420px;
@@ -118,12 +115,12 @@
       object-fit:cover;
       opacity:0;
       transition:opacity 1.2s ease;
+      z-index:1;
     }
     .slide.active {
       opacity:1;
       z-index:10;
     }
-
     .slider-controls {
       position:absolute;
       bottom:20px;
@@ -145,7 +142,6 @@
       background:#d500ff;
       transform:scale(1.4);
     }
-
     #final-heart-container {
       position:relative;
       width:86vw;
@@ -217,7 +213,6 @@
       touch-action:manipulation;
     }
     .btn:active { transform:scale(0.95); }
-
     /* Кнопка старта */
     #start-btn {
       position:fixed;
@@ -256,21 +251,21 @@
     <div class="phrase" id="w2">Праздником</div>
     <div class="phrase" id="w3">Родная</div>
     <div class="phrase" id="w4"><span class="big-heart">❤️</span></div>
-    <img id="gif2" src="gif2.gif" alt="поздравление" loading="eager">
+    <img id="gif2" src="gif2.gif" alt="поздравление">
   </section>
 
   <!-- Слайдер фото -->
   <div id="photos-section">
     <div class="slider" id="slider">
-      <img class="slide" src="photo1.jpg" alt="" loading="eager">
-      <img class="slide" src="photo2.jpg" alt="" loading="eager">
-      <img class="slide" src="photo3.jpg" alt="" loading="eager">
+      <img class="slide" src="photo1.jpg" alt="">
+      <img class="slide" src="photo2.jpg" alt="">
+      <img class="slide" src="photo3.jpg" alt="">
     </div>
     <div class="slider-controls" id="dots"></div>
   </div>
 
   <div id="final-heart-container">
-    <img id="final-heart" src="photo-heart.jpg" alt="сердце" loading="eager">
+    <img id="final-heart" src="photo-heart.jpg" alt="сердце">
     <div id="congrats-text">С праздником!!!</div>
   </div>
 
@@ -398,12 +393,16 @@ function goToSlide(n) {
 function nextSlide() {
   currentSlide = (currentSlide + 1) % slides.length;
   goToSlide(currentSlide);
+  
+  // Показываем кнопку «Сердечко» на последнем фото
+  if (currentSlide === slides.length - 1) {
+    document.getElementById('card-buttons').classList.add('visible');
+  }
 }
 
 function startPhotoSlider() {
   document.getElementById('photos-section').classList.add('active');
   createDots();
-  // Даём время на подгрузку фото
   setTimeout(() => {
     goToSlide(0);
     slideInterval = setInterval(nextSlide, 3500);
@@ -432,15 +431,13 @@ const startBtn = document.getElementById('start-btn');
 startBtn.addEventListener('click', () => {
   music.muted = false;
   music.play().catch(e => console.log('Музыка запущена:', e));
-
   startBtn.style.opacity = '0';
   startBtn.style.pointerEvents = 'none';
   setTimeout(() => startBtn.remove(), 1000);
-
   countdown();
 });
 
-// Дополнительный клик — для музыки
+// Дополнительный клик по странице — для музыки
 document.body.addEventListener('click', () => {
   if (music.paused || music.muted) {
     music.muted = false;

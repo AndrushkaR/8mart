@@ -5,13 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>С праздником, родная! 💜</title>
 
-  <!-- Preload картинок и музыки -->
+  <!-- Preload ТОЛЬКО того, что используется сразу (убираем предупреждения) -->
   <link rel="preload" as="image" href="gif2.gif">
   <link rel="preload" as="image" href="photo1.jpg">
-  <link rel="preload" as="image" href="photo2.jpg">
-  <link rel="preload" as="image" href="photo3.jpg">
   <link rel="preload" as="image" href="photo-heart.jpg">
-  <link rel="preload" as="audio" href="music.mp3">   <!-- ← твоя музыка -->
 
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -256,10 +253,8 @@
   </section>
 
   <!-- Фоновая музыка — твоя локальная -->
-  <audio id="bg-music" loop preload="auto">
+  <audio id="bg-music" loop preload="auto" playsinline muted>
     <source src="music.mp3" type="audio/mpeg">
-    <!-- Если хочешь оставить bensound как запасной вариант, раскомментируй ниже -->
-    <!-- <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg"> -->
     Твой браузер не поддерживает аудио.
   </audio>
 
@@ -401,31 +396,26 @@ show = function(idx) {
 
 // Музыка
 const music = document.getElementById('bg-music');
-music.volume = 0.3; // громкость (0.0 – 1.0), подкрути по вкусу
+music.volume = 0.3;
 
 // Запуск
 window.addEventListener('load', () => {
   countdown();
-  // Пытаемся запустить музыку автоматически
   music.play().catch(() => {
-    console.log('Автозапуск музыки заблокирован браузером — нужен клик');
+    console.log('Автозапуск музыки заблокирован — ждём клика');
   });
 });
 
-// На мобильных/Chrome — звук включается после любого касания экрана
-document.body.addEventListener('touchstart', () => {
-  if (music.paused || music.muted) {
-    music.muted = false;
-    music.play();
-  }
-}, { once: true });
+// Включаем звук после первого взаимодействия (touch или click)
+const enableAudio = () => {
+  music.muted = false;
+  music.play().catch(e => console.log('Play after interaction failed:', e));
+  document.body.removeEventListener('touchstart', enableAudio);
+  document.body.removeEventListener('click', enableAudio);
+};
 
-document.body.addEventListener('click', () => {
-  if (music.paused || music.muted) {
-    music.muted = false;
-    music.play();
-  }
-}, { once: true });
+document.body.addEventListener('touchstart', enableAudio, { once: true });
+document.body.addEventListener('click', enableAudio, { once: true });
 </script>
 </body>
 </html>

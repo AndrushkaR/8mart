@@ -5,11 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>С праздником, родная! 💜</title>
 
-  <!-- Preload только нужных ресурсов -->
-  <link rel="preload" as="image" href="gif2.gif">
-  <link rel="preload" as="image" href="photo1.jpg">
-  <link rel="preload" as="image" href="photo-heart.jpg">
-
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body, html {
@@ -44,6 +39,7 @@
       0% { transform:translateY(-220%); }
       100% { transform:translateY(240vh); }
     }
+
     section {
       position:fixed;
       inset:0;
@@ -58,91 +54,68 @@
       z-index:2;
     }
     section.active { opacity:1; pointer-events:all; }
-    #count {
-      font-size:38vw;
-      font-weight:900;
-      color:#d500ff;
-      text-shadow:0 0 80px #d500ff, 0 0 160px #d500ffaa;
-      letter-spacing:-14px;
-      margin-top:8vh;
-    }
-    .phrase {
-      font-size: clamp(9vw, 13vw, 80px);
-      font-weight:bold;
-      margin:16px 0;
-      opacity:0;
-      transform:scale(0.3);
-      transition:all 1.6s ease-out;
-      text-shadow:0 0 45px currentColor;
-    }
+
+    #count { font-size:38vw; font-weight:900; color:#d500ff; text-shadow:0 0 80px #d500ff, 0 0 160px #d500ffaa; letter-spacing:-14px; margin-top:8vh; }
+    .phrase { font-size: clamp(9vw, 13vw, 80px); font-weight:bold; margin:16px 0; opacity:0; transform:scale(0.3); transition:all 1.6s ease-out; text-shadow:0 0 45px currentColor; }
     .phrase.visible { opacity:1; transform:scale(1); }
     .big-heart { font-size: clamp(18vw, 24vw, 140px); color:#d500ff; animation:beat 1.8s infinite; }
     @keyframes beat { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
-    #gif2 {
-      max-width:82vw;
-      margin-top:4vh;
-      margin-bottom:8vh;
-      opacity:0;
-      transition:opacity 1.6s;
+    #gif2 { max-width:82vw; margin:4vh 0 8vh; opacity:0; transition:opacity 1.6s; }
+
+    /* ==================== СЛАЙДЕР ФОТО ==================== */
+    #photos-section {
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:3;
     }
-    #card-container {
-      width: 90vw;
-      max-width: 380px;
-      height: 58vh;
-      max-height: 500px;
-      perspective: 1700px;
-      margin-top: 6vh;
-    }
-    #card {
-      width: 100%;
-      height: 100%;
+    #photos-section.active { display:flex; }
+
+    .slider {
+      width: 92vw;
+      max-width: 420px;
+      height: 65vh;
+      max-height: 520px;
       position: relative;
-      transform-style: preserve-3d;
-      transition: transform 1.9s cubic-bezier(0.68, -0.6, 0.265, 1.6);
-      clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 60px #d500ff66;
     }
-    .face {
+    .slide {
       position: absolute;
       inset: 0;
-      backface-visibility: hidden;
-      overflow: hidden;
-      box-shadow: 0 18px 80px #000e;
-    }
-    .front {
-      background: linear-gradient(135deg, #3a005c, #9000d0);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14vw;
-      font-weight: bold;
-      color: #ffffff;
-      text-shadow: 0 0 40px #fff9;
-    }
-    .back {
-      transform: rotateY(180deg);
-      background: #000;
-      overflow: visible;
-    }
-    .back img {
-      width: 100%;
-      height: 100%;
+      opacity: 0;
+      transition: opacity 1.2s ease;
       object-fit: cover;
-      clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
     }
-    .bubble {
+    .slide.active {
+      opacity: 1;
+      z-index: 2;
+    }
+
+    .slider-controls {
       position: absolute;
-      top: 12%;
-      left: 10%;
-      right: 10%;
-      background: rgba(255,255,255,0.97);
-      color: #120024;
-      padding: 20px 24px;
-      border-radius: 20px;
-      font-size: 5vw;
-      line-height: 1.45;
-      box-shadow: 0 8px 30px #000c;
-      pointer-events: none;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 10;
     }
+    .dot {
+      width: 12px;
+      height: 12px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 50%;
+      transition: all 0.4s;
+    }
+    .dot.active {
+      background: #d500ff;
+      transform: scale(1.4);
+    }
+
     #final-heart-container {
       position: relative;
       width: 86vw;
@@ -151,7 +124,7 @@
       max-height: 420px;
       margin-top: 6vh;
       opacity: 0;
-      transition: opacity 1.2s ease;
+      transition: opacity 2s ease;
     }
     #final-heart-container.visible {
       opacity: 1;
@@ -162,13 +135,7 @@
       border-radius: 50%;
       object-fit: cover;
       box-shadow: 0 0 100px #d500ffcc, 0 0 200px #d500ff77;
-      opacity: 0;
-      transform: scale(0.7);
-      transition: all 2.5s ease-out;
-    }
-    #final-heart-container.visible #final-heart {
-      opacity: 1;
-      transform: scale(1);
+      animation: pulse-glow 3s infinite alternate;
     }
     @keyframes pulse-glow {
       0% { box-shadow: 0 0 100px #d500ff88, 0 0 200px #d500ff44; }
@@ -177,8 +144,7 @@
     #congrats-text {
       position: absolute;
       top: -8vh;
-      left: 0;
-      right: 0;
+      left: 0; right: 0;
       font-size: 8vw;
       font-weight: bold;
       color: #d500ff;
@@ -186,17 +152,14 @@
       white-space: nowrap;
       animation: marquee 12s linear infinite;
       opacity: 0;
-      transform: translateY(20px);
-      transition: all 1.5s ease-out;
+      transition: opacity 1.5s;
     }
-    #final-heart-container.visible #congrats-text {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    #congrats-text.visible { opacity: 1; }
     @keyframes marquee {
       0% { transform: translateX(120vw); }
       100% { transform: translateX(-120vw); }
     }
+
     .buttons {
       position: fixed;
       bottom: 5vh;
@@ -211,10 +174,7 @@
       pointer-events: none;
       transition: opacity 0.6s;
     }
-    .buttons.visible {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .buttons.visible { opacity: 1; pointer-events: all; }
     .btn {
       padding: 12px 28px;
       font-size: 4.5vw;
@@ -227,42 +187,17 @@
       border-radius: 16px;
       box-shadow: 0 6px 20px #d500ff66;
       cursor: pointer;
-      touch-action: manipulation;
     }
     .btn:active { transform: scale(0.95); }
-
-    /* Кнопка "Нажми, чтобы начать" */
-    #start-btn {
-      position: fixed;
-      inset: 0;
-      margin: auto;
-      width: 80vw;
-      max-width: 360px;
-      height: 120px;
-      font-size: clamp(28px, 8vw, 48px);
-      font-weight: bold;
-      background: linear-gradient(135deg, #d500ff, #9000d0);
-      color: #fff;
-      border: none;
-      border-radius: 30px;
-      box-shadow: 0 0 60px #d500ffaa;
-      cursor: pointer;
-      z-index: 9999;
-      transition: all 0.5s ease;
-    }
-    #start-btn:hover { transform: scale(1.08); }
-    #start-btn:active { transform: scale(0.95); }
   </style>
 </head>
 <body>
   <div id="rain-bg"></div>
 
-  <!-- Стартовая кнопка -->
-  <button id="start-btn">Нажми, чтобы начать 💜</button>
-
   <section id="count-section" class="active">
     <div id="count">3</div>
   </section>
+
   <section id="words-section">
     <div class="phrase" id="w1">С</div>
     <div class="phrase" id="w2">Праздником</div>
@@ -270,35 +205,33 @@
     <div class="phrase" id="w4"><span class="big-heart">❤️</span></div>
     <img id="gif2" src="gif2.gif" alt="поздравление">
   </section>
-  <section id="card-section">
-    <div id="card-container">
-      <div id="card">
-        <div class="face front">Открытка</div>
-        <div class="face back">
-          <img id="card-photo" src="photo1.jpg" alt="фото">
-          <div class="bubble">Люблю тебя безумно! 💜</div>
-        </div>
-      </div>
+
+  <!-- Новый слайдер вместо открытки -->
+  <div id="photos-section">
+    <div class="slider" id="slider">
+      <img class="slide" src="photo1.jpg" alt="">
+      <img class="slide" src="photo2.jpg" alt="">
+      <img class="slide" src="photo3.jpg" alt="">
     </div>
-    <div id="final-heart-container">
-      <img id="final-heart" src="photo-heart.jpg" alt="сердце">
-      <div id="congrats-text">С праздником!!!</div>
-    </div>
-    <div class="buttons" id="card-buttons">
-      <button class="btn" id="btn-open">Открыть</button>
-      <button class="btn" id="btn-next" style="opacity:0; pointer-events:none;">Следующее фото</button>
-      <button class="btn" id="btn-heart" style="opacity:0; pointer-events:none;">Сердечко</button>
-    </div>
-  </section>
+    <div class="slider-controls" id="dots"></div>
+  </div>
+
+  <div id="final-heart-container">
+    <img id="final-heart" src="photo-heart.jpg" alt="сердце">
+    <div id="congrats-text">С праздником!!!</div>
+  </div>
+
+  <div class="buttons" id="card-buttons">
+    <button class="btn" id="btn-heart">Сердечко</button>
+  </div>
 
   <!-- Музыка -->
   <audio id="bg-music" loop preload="auto" playsinline>
     <source src="music.mp3" type="audio/mpeg">
-    Твой браузер не поддерживает аудио.
   </audio>
 
 <script>
-// Дождь (как раньше)
+// ====================== ДОЖДЬ ======================
 function startRain() {
   const rain = document.getElementById('rain-bg');
   rain.innerHTML = '';
@@ -330,11 +263,10 @@ function startRain() {
 }
 startRain();
 
-// Сцены
+// ====================== СЦЕНЫ ======================
 const sections = [
   document.getElementById('count-section'),
-  document.getElementById('words-section'),
-  document.getElementById('card-section')
+  document.getElementById('words-section')
 ];
 let cur = 0;
 function show(idx) {
@@ -343,7 +275,7 @@ function show(idx) {
   cur = idx;
 }
 
-// Отсчёт и слова
+// ====================== ОТСЧЁТ И СЛОВА ======================
 function countdown() {
   const el = document.getElementById('count');
   let n = 3;
@@ -379,88 +311,87 @@ function showWords() {
       setTimeout(() => {
         document.getElementById('gif2').style.opacity = '1';
       }, 2400);
-      setTimeout(() => show(2), 6800);
+      setTimeout(() => startPhotoSlider(), 6800);   // ← переходим к слайдеру
     }
   }, 2800);
 }
 
-// Фото в открытке
-const photos = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg'];
-let photoIndex = 0;
-const cardPhoto = document.getElementById('card-photo');
-const btnNext = document.getElementById('btn-next');
-btnNext.addEventListener('click', () => {
-  photoIndex = (photoIndex + 1) % photos.length;
-  cardPhoto.src = photos[photoIndex];
-});
+// ====================== АВТОСЛАЙДЕР ФОТО ======================
+const slides = document.querySelectorAll('.slide');
+const dotsContainer = document.getElementById('dots');
+let currentSlide = 0;
+let slideInterval;
 
-// Кнопки
-const btnOpen = document.getElementById('btn-open');
+function createDots() {
+  dotsContainer.innerHTML = '';
+  slides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    if (i === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => goToSlide(i));
+    dotsContainer.appendChild(dot);
+  });
+}
+
+function goToSlide(n) {
+  slides.forEach(s => s.classList.remove('active'));
+  slides[n].classList.add('active');
+  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===n));
+  currentSlide = n;
+}
+
+function nextSlide() {
+  currentSlide = (currentSlide + 1) % slides.length;
+  goToSlide(currentSlide);
+}
+
+function startPhotoSlider() {
+  document.getElementById('photos-section').classList.add('active');
+  createDots();
+  goToSlide(0);
+  
+  slideInterval = setInterval(nextSlide, 3500);   // меняется каждые 3.5 секунды
+
+  // Показываем кнопки через 2 секунды после начала слайдера
+  setTimeout(() => {
+    document.getElementById('card-buttons').classList.add('visible');
+  }, 2000);
+}
+
+// ====================== КНОПКИ ======================
 const btnHeart = document.getElementById('btn-heart');
-const cardButtons = document.getElementById('card-buttons');
-const card = document.getElementById('card');
-
-btnOpen.addEventListener('click', () => {
-  card.classList.add('flipped');
-  card.style.transform = 'rotateY(180deg)';
-  btnOpen.style.display = 'none';
-  btnNext.style.opacity = '1';
-  btnNext.style.pointerEvents = 'all';
-  btnHeart.style.opacity = '1';
-  btnHeart.style.pointerEvents = 'all';
-});
 
 btnHeart.addEventListener('click', () => {
-  card.classList.remove('flipped');
-  card.style.transform = 'rotateY(0deg)';
+  clearInterval(slideInterval);                    // останавливаем слайдер
+  document.getElementById('photos-section').style.opacity = '0';
+  
   setTimeout(() => {
+    document.getElementById('photos-section').style.display = 'none';
     document.getElementById('final-heart-container').classList.add('visible');
+    document.getElementById('congrats-text').classList.add('visible');
     document.getElementById('card-buttons').classList.remove('visible');
   }, 800);
 });
 
-// Показ кнопок
-function showCardButtons() {
-  if (cur === 2) {
-    cardButtons.classList.add('visible');
-  }
-}
-const originalShow = show;
-show = function(idx) {
-  originalShow(idx);
-  if (idx === 2) setTimeout(showCardButtons, 500);
-};
-
-// Музыка
+// ====================== МУЗЫКА ======================
 const music = document.getElementById('bg-music');
 music.volume = 0.3;
 
-// Стартовая кнопка
-const startBtn = document.getElementById('start-btn');
-startBtn.addEventListener('click', () => {
-  // Запускаем музыку
-  music.muted = false;
-  music.play().catch(e => console.log('Музыка запущена:', e));
-
-  // Прячем кнопку
-  startBtn.style.opacity = '0';
-  startBtn.style.pointerEvents = 'none';
-  setTimeout(() => startBtn.remove(), 1000);
-
-  // Запускаем отсчёт
-  countdown();
-});
-
-// Запуск дождя сразу (фон живой)
-startRain();
-
-// Если вдруг кликнули куда-то ещё — музыка тоже стартует
 document.body.addEventListener('click', () => {
   if (music.paused || music.muted) {
     music.muted = false;
     music.play();
   }
 }, { once: true });
+
+// ====================== ЗАПУСК ======================
+function checkAndStart() {
+  countdown();
+}
+checkAndStart();
+
+window.addEventListener('orientationchange', () => setTimeout(checkAndStart, 300));
+window.addEventListener('resize', () => setTimeout(checkAndStart, 300));
 </script>
 </body>
 </html>

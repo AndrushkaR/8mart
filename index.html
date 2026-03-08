@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>С праздником, родная! 💜</title>
 
-  <!-- Preload только того, что используется сразу (убираем предупреждения) -->
+  <!-- Preload только нужных ресурсов -->
   <link rel="preload" as="image" href="gif2.gif">
   <link rel="preload" as="image" href="photo1.jpg">
   <link rel="preload" as="image" href="photo-heart.jpg">
@@ -13,7 +13,7 @@
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body, html {
-      height:100%;
+      height:100dvh;
       font-family:system-ui, sans-serif;
       background:#000;
       color:#fff;
@@ -58,172 +58,66 @@
       z-index:2;
     }
     section.active { opacity:1; pointer-events:all; }
-    #count {
-      font-size:38vw;
-      font-weight:900;
-      color:#d500ff;
-      text-shadow:0 0 80px #d500ff, 0 0 160px #d500ffaa;
-      letter-spacing:-14px;
-      margin-top:8vh;
+
+    /* Кнопка "Нажми, чтобы начать" */
+    #start-btn {
+      position: fixed;
+      inset: 0;
+      margin: auto;
+      width: 80vw;
+      max-width: 360px;
+      height: 120px;
+      font-size: clamp(28px, 8vw, 48px);
+      font-weight: bold;
+      background: linear-gradient(135deg, #d500ff, #9000d0);
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      box-shadow: 0 0 40px #d500ff88;
+      cursor: pointer;
+      z-index: 999;
+      transition: all 0.4s ease;
+      text-shadow: 0 0 15px #000;
     }
-    .phrase {
-      font-size: clamp(9vw, 13vw, 80px);
-      font-weight:bold;
-      margin:16px 0;
-      opacity:0;
-      transform:scale(0.3);
-      transition:all 1.6s ease-out;
-      text-shadow:0 0 45px currentColor;
-    }
+    #start-btn:hover { transform: scale(1.08); }
+    #start-btn:active { transform: scale(0.96); }
+
+    /* Остальные стили без изменений */
+    #count { font-size:38vw; font-weight:900; color:#d500ff; text-shadow:0 0 80px #d500ff, 0 0 160px #d500ffaa; letter-spacing:-14px; margin-top:8vh; }
+    .phrase { font-size: clamp(9vw, 13vw, 80px); font-weight:bold; margin:16px 0; opacity:0; transform:scale(0.3); transition:all 1.6s ease-out; text-shadow:0 0 45px currentColor; }
     .phrase.visible { opacity:1; transform:scale(1); }
     .big-heart { font-size: clamp(18vw, 24vw, 140px); color:#d500ff; animation:beat 1.8s infinite; }
     @keyframes beat { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
-    #gif2 {
-      max-width:82vw;
-      margin-top:4vh;
-      margin-bottom:8vh;
-      opacity:0;
-      transition:opacity 1.6s;
-    }
-    #card-container {
-      width: 90vw;
-      max-width: 380px;
-      height: 58vh;
-      max-height: 500px;
-      perspective: 1700px;
-      margin-top: 6vh;
-    }
-    #card {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 1.9s cubic-bezier(0.68, -0.6, 0.265, 1.6);
-      clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
-    }
-    .face {
-      position: absolute;
-      inset: 0;
-      backface-visibility: hidden;
-      overflow: hidden;
-      box-shadow: 0 18px 80px #000e;
-    }
-    .front {
-      background: linear-gradient(135deg, #3a005c, #9000d0);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14vw;
-      font-weight: bold;
-      color: #ffffff;
-      text-shadow: 0 0 40px #fff9;
-    }
-    .back {
-      transform: rotateY(180deg);
-      background: #000;
-      overflow: visible;
-    }
-    .back img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
-    }
-    .bubble {
-      position: absolute;
-      top: 12%;
-      left: 10%;
-      right: 10%;
-      background: rgba(255,255,255,0.97);
-      color: #120024;
-      padding: 20px 24px;
-      border-radius: 20px;
-      font-size: 5vw;
-      line-height: 1.45;
-      box-shadow: 0 8px 30px #000c;
-      pointer-events: none;
-    }
-    #final-heart-container {
-      position: relative;
-      width: 86vw;
-      max-width: 420px;
-      height: 86vw;
-      max-height: 420px;
-      margin-top: 6vh;
-    }
-    #final-heart {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 0 100px #d500ffcc, 0 0 200px #d500ff77;
-      opacity: 0;
-      transform: scale(0);
-      transition: all 2.8s ease-out;
-    }
-    @keyframes pulse-glow {
-      0% { box-shadow: 0 0 100px #d500ff88, 0 0 200px #d500ff44; }
-      100% { box-shadow: 0 0 140px #d500ffff, 0 0 280px #d500ffaa; }
-    }
-    #congrats-text {
-      position: absolute;
-      top: -8vh;
-      left: 0;
-      right: 0;
-      font-size: 8vw;
-      font-weight: bold;
-      color: #d500ff;
-      text-shadow: 0 0 30px #d500ff, 0 0 60px #d500ff88;
-      white-space: nowrap;
-      animation: marquee 12s linear infinite;
-      opacity: 0;
-      transition: opacity 1s;
-    }
-    #congrats-text.visible { opacity: 1; }
-    @keyframes marquee {
-      0% { transform: translateX(120vw); }
-      100% { transform: translateX(-120vw); }
-    }
-    .buttons {
-      position: fixed;
-      bottom: 5vh;
-      left: 5vw;
-      right: 5vw;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      z-index: 10;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.6s;
-    }
-    .buttons.visible {
-      opacity: 1;
-      pointer-events: all;
-    }
-    .btn {
-      padding: 12px 28px;
-      font-size: 4.5vw;
-      min-width: 120px;
-      max-width: 45%;
-      font-weight: bold;
-      background: #d500ff;
-      color: #000;
-      border: none;
-      border-radius: 16px;
-      box-shadow: 0 6px 20px #d500ff66;
-      cursor: pointer;
-      touch-action: manipulation;
-    }
-    .btn:active { transform: scale(0.95); }
+    #gif2 { max-width:82vw; margin:4vh 0 8vh; opacity:0; transition:opacity 1.6s; }
+    #card-container { width:90vw; max-width:380px; height:58vh; max-height:500px; perspective:1700px; margin-top:6vh; }
+    #card { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform 1.9s cubic-bezier(0.68,-0.6,0.265,1.6); clip-path:polygon(50% 0%,90% 20%,100% 60%,75% 100%,25% 100%,0% 60%,10% 20%); }
+    #card.flipped { transform:rotateY(180deg); }
+    .face { position:absolute; inset:0; backface-visibility:hidden; overflow:hidden; box-shadow:0 18px 80px #000e; }
+    .front { background:linear-gradient(135deg,#3a005c,#9000d0); display:flex; align-items:center; justify-content:center; font-size:14vw; font-weight:bold; color:#fff; text-shadow:0 0 40px #fff9; }
+    .back { transform:rotateY(180deg); background:#000; overflow:visible; }
+    .back img { width:100%; height:100%; object-fit:cover; clip-path:polygon(50% 0%,90% 20%,100% 60%,75% 100%,25% 100%,0% 60%,10% 20%); }
+    .bubble { position:absolute; top:12%; left:10%; right:10%; background:rgba(255,255,255,0.97); color:#120024; padding:20px 24px; border-radius:20px; font-size:5vw; line-height:1.45; box-shadow:0 8px 30px #000c; pointer-events:none; }
+    #final-heart-container { position:relative; width:86vw; max-width:420px; height:86vw; max-height:420px; margin-top:6vh; }
+    #final-heart { width:100%; height:100%; border-radius:50%; object-fit:cover; box-shadow:0 0 100px #d500ffcc,0 0 200px #d500ff77; opacity:0; transform:scale(0); transition:all 2.8s ease-out; }
+    #congrats-text { position:absolute; top:-8vh; left:0; right:0; font-size:8vw; font-weight:bold; color:#d500ff; text-shadow:0 0 30px #d500ff,0 0 60px #d500ff88; white-space:nowrap; animation:marquee 12s linear infinite; opacity:0; transition:opacity 1s; }
+    #congrats-text.visible { opacity:1; }
+    @keyframes marquee { 0%{transform:translateX(120vw)} 100%{transform:translateX(-120vw)} }
+    .buttons { position:fixed; bottom:5vh; left:5vw; right:5vw; display:flex; justify-content:center; gap:20px; flex-wrap:wrap; z-index:10; opacity:0; pointer-events:none; transition:opacity 0.6s; }
+    .buttons.visible { opacity:1; pointer-events:all; }
+    .btn { padding:12px 28px; font-size:4.5vw; min-width:120px; max-width:45%; font-weight:bold; background:#d500ff; color:#000; border:none; border-radius:16px; box-shadow:0 6px 20px #d500ff66; cursor:pointer; touch-action:manipulation; }
+    .btn:active { transform:scale(0.95); }
   </style>
 </head>
 <body>
   <div id="rain-bg"></div>
-  <section id="count-section" class="active">
+
+  <!-- Большая стартовая кнопка -->
+  <button id="start-btn">Нажми, чтобы начать 💜</button>
+
+  <section id="count-section">
     <div id="count">3</div>
   </section>
+
   <section id="words-section">
     <div class="phrase" id="w1">С</div>
     <div class="phrase" id="w2">Праздником</div>
@@ -231,6 +125,7 @@
     <div class="phrase" id="w4"><span class="big-heart">❤️</span></div>
     <img id="gif2" src="gif2.gif" alt="поздравление">
   </section>
+
   <section id="card-section">
     <div id="card-container">
       <div id="card">
@@ -252,8 +147,8 @@
     </div>
   </section>
 
-  <!-- Фоновая музыка — твоя локальная -->
-  <audio id="bg-music" loop preload="auto" playsinline muted>
+  <!-- Музыка -->
+  <audio id="bg-music" loop preload="auto" playsinline>
     <source src="music.mp3" type="audio/mpeg">
     Твой браузер не поддерживает аудио.
   </audio>
@@ -291,12 +186,8 @@ function startRain() {
 }
 startRain();
 
-// Сцены
-const sections = [
-  document.getElementById('count-section'),
-  document.getElementById('words-section'),
-  document.getElementById('card-section')
-];
+// Сцены и логика без изменений
+const sections = [document.getElementById('count-section'), document.getElementById('words-section'), document.getElementById('card-section')];
 let cur = 0;
 function show(idx) {
   sections.forEach(s => s.classList.remove('active'));
@@ -304,7 +195,6 @@ function show(idx) {
   cur = idx;
 }
 
-// Отсчёт и слова
 function countdown() {
   const el = document.getElementById('count');
   let n = 3;
@@ -323,12 +213,7 @@ function countdown() {
 }
 
 function showWords() {
-  const ws = [
-    document.getElementById('w1'),
-    document.getElementById('w2'),
-    document.getElementById('w3'),
-    document.getElementById('w4')
-  ];
+  const ws = [document.getElementById('w1'), document.getElementById('w2'), document.getElementById('w3'), document.getElementById('w4')];
   let i = 0;
   const iv = setInterval(() => {
     if (i > 0) ws[i-1].classList.remove('visible');
@@ -337,15 +222,13 @@ function showWords() {
       i++;
     } else {
       clearInterval(iv);
-      setTimeout(() => {
-        document.getElementById('gif2').style.opacity = '1';
-      }, 2400);
+      setTimeout(() => document.getElementById('gif2').style.opacity = '1', 2400);
       setTimeout(() => show(2), 6800);
     }
   }, 2800);
 }
 
-// Фото
+// Фото и кнопки без изменений
 const photos = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg'];
 let photoIndex = 0;
 const cardPhoto = document.getElementById('card-photo');
@@ -354,7 +237,6 @@ document.getElementById('btn-next').addEventListener('click', () => {
   cardPhoto.src = photos[photoIndex];
 });
 
-// Кнопки
 const btnOpen = document.getElementById('btn-open');
 const btnNext = document.getElementById('btn-next');
 const btnHeart = document.getElementById('btn-heart');
@@ -382,11 +264,8 @@ btnHeart.addEventListener('click', () => {
   }, 800);
 });
 
-// Показ кнопок
 function showCardButtons() {
-  if (cur === 2) {
-    cardButtons.classList.add('visible');
-  }
+  if (cur === 2) cardButtons.classList.add('visible');
 }
 const originalShow = show;
 show = function(idx) {
@@ -398,32 +277,30 @@ show = function(idx) {
 const music = document.getElementById('bg-music');
 music.volume = 0.3;
 
-// Функция включения звука
-function enableMusic() {
-  if (music.muted) {
-    music.muted = false;
-    music.play().catch(e => console.log('Воспроизведение после клика:', e));
-  }
-  // Удаляем слушатели
-  document.body.removeEventListener('touchstart', enableMusic);
-  document.body.removeEventListener('click', enableMusic);
-}
+// Стартовая кнопка
+const startBtn = document.getElementById('start-btn');
+startBtn.addEventListener('click', () => {
+  // Запускаем музыку со звуком
+  music.muted = false;
+  music.play().catch(e => console.log('Музыка запущена после клика:', e));
 
-// Запуск
-window.addEventListener('load', () => {
+  // Прячем кнопку
+  startBtn.style.opacity = '0';
+  startBtn.style.pointerEvents = 'none';
+  setTimeout(() => startBtn.remove(), 800); // полностью убираем из DOM
+
+  // Запускаем отсчёт и всё остальное
+  startRain(); // если дождь ещё не стартовал
   countdown();
-  // Пытаемся запустить muted сразу (часто разрешается)
-  music.play().catch(() => {
-    console.log('Автоплей muted заблокирован — ждём взаимодействия');
-  });
 });
 
-// Включаем звук после первого касания/клика
-document.body.addEventListener('touchstart', enableMusic, { once: true });
-document.body.addEventListener('click', enableMusic, { once: true });
-
-// Гарантированно включаем при открытии открытки
-btnOpen.addEventListener('click', enableMusic);
+// Если вдруг кликнули куда-то ещё — тоже запускаем музыку
+document.body.addEventListener('click', () => {
+  if (music.paused || music.muted) {
+    music.muted = false;
+    music.play();
+  }
+}, { once: true });
 </script>
 </body>
 </html>

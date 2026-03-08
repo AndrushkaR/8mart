@@ -4,6 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>С праздником, родная! 💜</title>
+
+  <!-- Preload картинок и музыки -->
+  <link rel="preload" as="image" href="gif2.gif">
+  <link rel="preload" as="image" href="photo1.jpg">
+  <link rel="preload" as="image" href="photo2.jpg">
+  <link rel="preload" as="image" href="photo3.jpg">
+  <link rel="preload" as="image" href="photo-heart.jpg">
+  <link rel="preload" as="audio" href="https://www.bensound.com/bensound-music/bensound-love.mp3">
+
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body, html {
@@ -14,7 +23,6 @@
       overflow:hidden;
       touch-action:manipulation;
     }
-
     #rain-bg {
       position:fixed;
       inset:0;
@@ -22,7 +30,6 @@
       z-index:-1;
       pointer-events:none;
     }
-
     .rain-col {
       position:absolute;
       top:-220vh;
@@ -34,15 +41,12 @@
       white-space:pre;
       animation:fall linear infinite;
     }
-
     .lead { color:#ffffff; text-shadow:0 0 25px #fff, 0 0 50px #c300ff; font-weight:bold; }
-    .fade  { opacity:0.48; }
-
+    .fade { opacity:0.48; }
     @keyframes fall {
-      0%   { transform:translateY(-220%); }
+      0% { transform:translateY(-220%); }
       100% { transform:translateY(240vh); }
     }
-
     section {
       position:fixed;
       inset:0;
@@ -56,9 +60,7 @@
       transition:opacity 0.9s ease;
       z-index:2;
     }
-
     section.active { opacity:1; pointer-events:all; }
-
     #count {
       font-size:38vw;
       font-weight:900;
@@ -67,7 +69,6 @@
       letter-spacing:-14px;
       margin-top:8vh;
     }
-
     .phrase {
       font-size: clamp(9vw, 13vw, 80px);
       font-weight:bold;
@@ -77,13 +78,9 @@
       transition:all 1.6s ease-out;
       text-shadow:0 0 45px currentColor;
     }
-
     .phrase.visible { opacity:1; transform:scale(1); }
-
     .big-heart { font-size: clamp(18vw, 24vw, 140px); color:#d500ff; animation:beat 1.8s infinite; }
-
     @keyframes beat { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
-
     #gif2 {
       max-width:82vw;
       margin-top:4vh;
@@ -91,7 +88,6 @@
       opacity:0;
       transition:opacity 1.6s;
     }
-
     #card-container {
       width: 90vw;
       max-width: 380px;
@@ -100,7 +96,6 @@
       perspective: 1700px;
       margin-top: 6vh;
     }
-
     #card {
       width: 100%;
       height: 100%;
@@ -109,7 +104,6 @@
       transition: transform 1.9s cubic-bezier(0.68, -0.6, 0.265, 1.6);
       clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
     }
-
     .face {
       position: absolute;
       inset: 0;
@@ -117,7 +111,6 @@
       overflow: hidden;
       box-shadow: 0 18px 80px #000e;
     }
-
     .front {
       background: linear-gradient(135deg, #3a005c, #9000d0);
       display: flex;
@@ -128,20 +121,17 @@
       color: #ffffff;
       text-shadow: 0 0 40px #fff9;
     }
-
     .back {
       transform: rotateY(180deg);
       background: #000;
-      overflow: visible; /* важно для видимости фото */
+      overflow: visible;
     }
-
     .back img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
     }
-
     .bubble {
       position: absolute;
       top: 12%;
@@ -156,7 +146,6 @@
       box-shadow: 0 8px 30px #000c;
       pointer-events: none;
     }
-
     #final-heart-container {
       position: relative;
       width: 86vw;
@@ -165,7 +154,6 @@
       max-height: 420px;
       margin-top: 6vh;
     }
-
     #final-heart {
       width: 100%;
       height: 100%;
@@ -175,14 +163,11 @@
       opacity: 0;
       transform: scale(0);
       transition: all 2.8s ease-out;
-      animation: pulse-glow 3s infinite alternate;
     }
-
     @keyframes pulse-glow {
-      0%   { box-shadow: 0 0 100px #d500ff88, 0 0 200px #d500ff44; }
+      0% { box-shadow: 0 0 100px #d500ff88, 0 0 200px #d500ff44; }
       100% { box-shadow: 0 0 140px #d500ffff, 0 0 280px #d500ffaa; }
     }
-
     #congrats-text {
       position: absolute;
       top: -8vh;
@@ -197,14 +182,11 @@
       opacity: 0;
       transition: opacity 1s;
     }
-
     #congrats-text.visible { opacity: 1; }
-
     @keyframes marquee {
-      0%   { transform: translateX(120vw); }
+      0% { transform: translateX(120vw); }
       100% { transform: translateX(-120vw); }
     }
-
     .buttons {
       position: fixed;
       bottom: 5vh;
@@ -219,12 +201,10 @@
       pointer-events: none;
       transition: opacity 0.6s;
     }
-
     .buttons.visible {
       opacity: 1;
       pointer-events: all;
     }
-
     .btn {
       padding: 12px 28px;
       font-size: 4.5vw;
@@ -239,18 +219,14 @@
       cursor: pointer;
       touch-action: manipulation;
     }
-
     .btn:active { transform: scale(0.95); }
   </style>
 </head>
 <body>
-
   <div id="rain-bg"></div>
-
   <section id="count-section" class="active">
     <div id="count">3</div>
   </section>
-
   <section id="words-section">
     <div class="phrase" id="w1">С</div>
     <div class="phrase" id="w2">Праздником</div>
@@ -258,7 +234,6 @@
     <div class="phrase" id="w4"><span class="big-heart">❤️</span></div>
     <img id="gif2" src="gif2.gif" alt="поздравление">
   </section>
-
   <section id="card-section">
     <div id="card-container">
       <div id="card">
@@ -269,12 +244,10 @@
         </div>
       </div>
     </div>
-
     <div id="final-heart-container">
       <img id="final-heart" src="photo-heart.jpg" alt="сердце">
       <div id="congrats-text">С праздником!!!</div>
     </div>
-
     <div class="buttons" id="card-buttons">
       <button class="btn" id="btn-open">Открыть</button>
       <button class="btn" id="btn-next" style="opacity:0; pointer-events:none;">Следующее фото</button>
@@ -282,46 +255,43 @@
     </div>
   </section>
 
+  <!-- Фоновая музыка -->
+  <audio id="bg-music" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    Твой браузер не поддерживает аудио.
+  </audio>
+
 <script>
-// Дождь (как раньше)
+// Дождь
 function startRain() {
   const rain = document.getElementById('rain-bg');
   rain.innerHTML = '';
-
-  const chars = 'СПРАЗДНИКОМ!!!❤️💜ЛЮБЛЮТЕБЯРОДНАЯСЧАСТЬЯ!!!   ';
-
+  const chars = 'СПРАЗДНИКОМ!!!❤️💜ЛЮБЛЮТЕБЯРОДНАЯСЧАСТЬЯ!!! ';
   const cols = Math.floor(window.innerWidth / 13) + 22;
-
   for (let i = 0; i < cols; i++) {
     const col = document.createElement('div');
     col.className = 'rain-col';
     col.style.left = `${i * 2.4}vw`;
     col.style.animationDuration = `${5 + Math.random() * 25}s`;
     col.style.animationDelay = `-${Math.random() * 22}s`;
-
     let content = '';
     const len = 50 + Math.floor(Math.random() * 80);
-
     for (let j = 0; j < len; j++) {
       const ch = chars[Math.floor(Math.random() * chars.length)];
       if (j === 0) content += `<span class="lead">${ch}</span>`;
       else if (j < 12) content += `<span>${ch}</span>`;
       else content += `<span class="fade">${ch}</span>`;
     }
-
     if (Math.random() < 0.7) {
-      const ph = ['С П Р А З Д Н И К О М ! ! !', 'С ПРАЗДНИКОМ!!! ❤️', 'Л Ю Б Л Ю   Т Е Б Я', 'С Д Н Ё М   Р О Ж Д Е Н И Я !!!'][Math.floor(Math.random()*4)];
+      const ph = ['С П Р А З Д Н И К О М ! ! !', 'С ПРАЗДНИКОМ!!! ❤️', 'Л Ю Б Л Ю Т Е Б Я', 'С Д Н Ё М Р О Ж Д Е Н И Я !!!'][Math.floor(Math.random()*4)];
       const pos = Math.floor(Math.random() * (len - 15));
       content = content.substring(0, pos*12) + ph + content.substring((pos + ph.length)*12);
     }
-
     col.innerHTML = content;
     rain.appendChild(col);
   }
-
   setTimeout(startRain, 10000 + Math.random() * 15000);
 }
-
 startRain();
 
 // Сцены
@@ -330,21 +300,18 @@ const sections = [
   document.getElementById('words-section'),
   document.getElementById('card-section')
 ];
-
 let cur = 0;
-
 function show(idx) {
   sections.forEach(s => s.classList.remove('active'));
   sections[idx].classList.add('active');
   cur = idx;
 }
 
-// Отсчёт и слова (как раньше)
+// Отсчёт и слова
 function countdown() {
   const el = document.getElementById('count');
   let n = 3;
   el.textContent = n;
-
   const t = setInterval(() => {
     n--;
     el.textContent = n;
@@ -365,7 +332,6 @@ function showWords() {
     document.getElementById('w3'),
     document.getElementById('w4')
   ];
-
   let i = 0;
   const iv = setInterval(() => {
     if (i > 0) ws[i-1].classList.remove('visible');
@@ -382,20 +348,18 @@ function showWords() {
   }, 2800);
 }
 
-// Фото в открытке
-const photos = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg']; // замени на свои
+// Фото
+const photos = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg'];
 let photoIndex = 0;
-
 const cardPhoto = document.getElementById('card-photo');
-const btnNext = document.getElementById('btn-next');
-
-btnNext.addEventListener('click', () => {
+document.getElementById('btn-next').addEventListener('click', () => {
   photoIndex = (photoIndex + 1) % photos.length;
   cardPhoto.src = photos[photoIndex];
 });
 
 // Кнопки
 const btnOpen = document.getElementById('btn-open');
+const btnNext = document.getElementById('btn-next');
 const btnHeart = document.getElementById('btn-heart');
 const cardButtons = document.getElementById('card-buttons');
 const card = document.getElementById('card');
@@ -414,7 +378,8 @@ btnHeart.addEventListener('click', () => {
   card.classList.remove('flipped');
   card.style.transform = 'rotateY(0deg)';
   setTimeout(() => {
-    document.getElementById('final-heart').classList.add('visible');
+    document.getElementById('final-heart').style.opacity = '1';
+    document.getElementById('final-heart').style.transform = 'scale(1)';
     document.getElementById('congrats-text').classList.add('visible');
     cardButtons.classList.remove('visible');
   }, 800);
@@ -426,23 +391,29 @@ function showCardButtons() {
     cardButtons.classList.add('visible');
   }
 }
-
 const originalShow = show;
 show = function(idx) {
   originalShow(idx);
   if (idx === 2) setTimeout(showCardButtons, 500);
 };
 
-// Запуск
-function checkAndStart() {
-  if (window.innerWidth > window.innerHeight) {
-    countdown();
-  }
-}
+// Музыка
+const music = document.getElementById('bg-music');
+music.volume = 0.3; // не слишком громко
 
-checkAndStart();
-window.addEventListener('orientationchange', () => setTimeout(checkAndStart, 300));
-window.addEventListener('resize', () => setTimeout(checkAndStart, 300));
+// Запуск (всегда, без проверки ориентации)
+window.addEventListener('load', () => {
+  countdown();
+  // Автозапуск музыки (браузеры могут блокировать — если не играет, кликни куда-нибудь на странице)
+  music.play().catch(() => {
+    console.log('Автозапуск музыки заблокирован — кликни на страницу');
+  });
+});
+
+// На мобильных иногда нужно взаимодействие пользователя
+document.body.addEventListener('click', () => {
+  if (music.paused) music.play();
+}, { once: true });
 </script>
 </body>
 </html>

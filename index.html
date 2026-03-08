@@ -86,7 +86,7 @@
 
     #gif2 {
       max-width:82vw;
-      margin-top:4vh;          /* подняли гифку выше */
+      margin-top:4vh;
       margin-bottom:8vh;
       opacity:0;
       transition:opacity 1.6s;
@@ -95,7 +95,7 @@
     #card-container {
       width:95vw;
       max-width:440px;
-      height:60vh;             /* уменьшили высоту, чтобы кнопки помещались */
+      height:60vh;
       max-height:520px;
       perspective:1700px;
       margin-top:6vh;
@@ -106,13 +106,15 @@
       position:relative;
       transform-style:preserve-3d;
       transition:transform 1.9s cubic-bezier(0.68,-0.6,0.265,1.6);
+      clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+      /* форма сердца */
     }
 
     .face {
       position:absolute;
       inset:0;
       backface-visibility:hidden;
-      border-radius:24px;
+      border-radius:0; /* убрали скругление, т.к. форма сердца */
       overflow:hidden;
       box-shadow:0 18px 80px #000e;
     }
@@ -130,36 +132,73 @@
 
     .back { transform:rotateY(180deg); background:#000; }
 
-    .back img { width:100%; height:100%; object-fit:cover; }
+    .back img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+    }
 
     .bubble {
       position:absolute;
-      top:8%; left:8%; right:8%;
+      top:12%; left:10%; right:10%;
       background:rgba(255,255,255,0.97);
       color:#120024;
-      padding:22px 26px;
-      border-radius:24px;
-      font-size:5.5vw;
+      padding:20px 24px;
+      border-radius:20px;
+      font-size:5vw;
       line-height:1.45;
-      box-shadow:0 10px 35px #000c;
+      box-shadow:0 8px 30px #000c;
       pointer-events:none;
     }
 
-    #final-heart {
+    /* Финальное сердце + текст сверху */
+    #final-heart-container {
+      position:relative;
       width:86vw; max-width:420px;
       height:86vw; max-height:420px;
+      margin-top:6vh;
+    }
+
+    #final-heart {
+      width:100%;
+      height:100%;
       border-radius:50%;
       object-fit:cover;
       box-shadow:0 0 100px #d500ffcc, 0 0 200px #d500ff77;
       opacity:0;
       transform:scale(0);
       transition:all 2.8s ease-out;
-      margin-top:6vh;
+      animation:pulse-glow 3s infinite alternate;
     }
 
-    #final-heart.visible { opacity:1; transform:scale(1); }
+    @keyframes pulse-glow {
+      0%   { box-shadow:0 0 100px #d500ff88, 0 0 200px #d500ff44; }
+      100% { box-shadow:0 0 140px #d500ffff, 0 0 280px #d500ffaa; }
+    }
 
-    /* Кнопки под открыткой */
+    #congrats-text {
+      position:absolute;
+      top:-6vh;
+      left:0; right:0;
+      font-size:8vw;
+      font-weight:bold;
+      color:#d500ff;
+      text-shadow:0 0 30px #d500ff, 0 0 60px #d500ff88;
+      white-space:nowrap;
+      animation:marquee 12s linear infinite;
+      opacity:0;
+      transition:opacity 1s;
+    }
+
+    #congrats-text.visible { opacity:1; }
+
+    @keyframes marquee {
+      0%   { transform:translateX(120vw); }
+      100% { transform:translateX(-120vw); }
+    }
+
+    /* Кнопки */
     .buttons {
       position:fixed;
       bottom:6vh;
@@ -215,22 +254,26 @@
       <div id="card">
         <div class="face front">Открытка</div>
         <div class="face back">
-          <img src="photo1.jpg" alt="фото">
+          <img id="card-photo" src="photo1.jpg" alt="фото 1">
           <div class="bubble">Люблю тебя безумно! 💜</div>
         </div>
       </div>
     </div>
-    <img id="final-heart" src="photo-heart.jpg" alt="сердце">
 
-    <!-- Кнопки -->
+    <div id="final-heart-container">
+      <img id="final-heart" src="photo-heart.jpg" alt="сердце">
+      <div id="congrats-text">С праздником!!!</div>
+    </div>
+
     <div class="buttons" id="card-buttons">
       <button class="btn" id="btn-open">Открыть</button>
-      <button class="btn" id="btn-heart" style="opacity:0.4; pointer-events:none;">Сердечко</button>
+      <button class="btn" id="btn-next" style="opacity:0; pointer-events:none;">Следующее фото</button>
+      <button class="btn" id="btn-heart" style="opacity:0; pointer-events:none;">Сердечко</button>
     </div>
   </section>
 
 <script>
-// Дождь
+// Дождь (как раньше)
 function startRain() {
   const rain = document.getElementById('rain-bg');
   rain.innerHTML = '';
@@ -305,7 +348,7 @@ function countdown() {
   }, 1700);
 }
 
-// Слова + гифка
+// Слова
 function showWords() {
   const ws = [
     document.getElementById('w1'),
@@ -330,7 +373,19 @@ function showWords() {
   }, 2800);
 }
 
-// Кнопки открытки
+// Фото в открытке
+const photos = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg']; // добавь свои фото
+let photoIndex = 0;
+
+const cardPhoto = document.getElementById('card-photo');
+const btnNext = document.getElementById('btn-next');
+
+btnNext.addEventListener('click', () => {
+  photoIndex = (photoIndex + 1) % photos.length;
+  cardPhoto.src = photos[photoIndex];
+});
+
+// Кнопки
 const btnOpen = document.getElementById('btn-open');
 const btnHeart = document.getElementById('btn-heart');
 const cardButtons = document.getElementById('card-buttons');
@@ -340,6 +395,8 @@ btnOpen.addEventListener('click', () => {
   card.classList.add('flipped');
   card.style.transform = 'rotateY(180deg)';
   btnOpen.style.display = 'none';
+  btnNext.style.opacity = '1';
+  btnNext.style.pointerEvents = 'all';
   btnHeart.style.opacity = '1';
   btnHeart.style.pointerEvents = 'all';
 });
@@ -349,16 +406,23 @@ btnHeart.addEventListener('click', () => {
   card.style.transform = 'rotateY(0deg)';
   setTimeout(() => {
     document.getElementById('final-heart').classList.add('visible');
+    document.getElementById('congrats-text').classList.add('visible');
     cardButtons.classList.remove('visible');
   }, 800);
 });
 
-// Показ кнопок когда открытка на экране
+// Показ кнопок на открытке
 function showCardButtons() {
   if (cur === 2) {
     cardButtons.classList.add('visible');
   }
 }
+
+const originalShow = show;
+show = function(idx) {
+  originalShow(idx);
+  if (idx === 2) setTimeout(showCardButtons, 500);
+};
 
 // Запуск
 function checkAndStart() {
@@ -370,15 +434,6 @@ function checkAndStart() {
 checkAndStart();
 window.addEventListener('orientationchange', () => setTimeout(checkAndStart, 300));
 window.addEventListener('resize', () => setTimeout(checkAndStart, 300));
-
-// Когда переходим на открытку — показываем кнопки
-const originalShow = show;
-show = function(idx) {
-  originalShow(idx);
-  if (idx === 2) {
-    setTimeout(showCardButtons, 500);
-  }
-};
 </script>
 </body>
 </html>

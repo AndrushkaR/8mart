@@ -8,7 +8,7 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     body, html {
       height:100%;
-      font-family:system-ui, sans-serif;
+      font-family:system-ui, -apple-system, sans-serif;
       background:#000;
       color:#fff;
       overflow:hidden;
@@ -16,336 +16,405 @@
     }
 
     /* Постоянный дождь-фон */
-    #rain-bg {
-      position: fixed;
-      inset: 0;
-      overflow: hidden;
-      z-index: -1;
-      pointer-events: none;
+    #rain {
+      position:fixed;
+      inset:0;
+      overflow:hidden;
+      z-index:-1;
+      pointer-events:none;
     }
 
-    .col {
-      position: absolute;
-      top: -150vh;
-      font-family: 'Courier New', Consolas, monospace;
-      font-size: 1.15rem;
-      line-height: 1.0;
-      color: #c300ff;
-      text-shadow: 0 0 10px #c300ffaa, 0 0 20px #c300ff66;
-      white-space: pre;
-      animation: fall linear infinite;
+    .column {
+      position:absolute;
+      top:-180vh;
+      font-family:'Courier New', monospace;
+      font-size:1.25rem;
+      line-height:1.05;
+      color:#c300ff;
+      text-shadow:0 0 12px #c300ffaa, 0 0 24px #c300ff66;
+      white-space:pre;
+      animation:fall linear infinite;
     }
+
     .lead {
-      color: #ffffff;
-      text-shadow: 0 0 18px #fff, 0 0 35px #c300ff;
-      font-weight: bold;
+      color:#ffffff;
+      text-shadow:0 0 20px #fff, 0 0 40px #c300ff;
+      font-weight:bold;
     }
-    .fade { opacity: 0.4; }
+
+    .fade { opacity:0.45; }
+
     @keyframes fall {
-      0%   { transform: translateY(-150%); }
-      100% { transform: translateY(170vh); }
+      0%   { transform:translateY(-180%); }
+      100% { transform:translateY(200vh); }
     }
 
-    /* Сцены поверх дождя */
+    /* Сцены */
     section {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.8s ease;
-      z-index: 1;
-    }
-    section.active { opacity: 1; pointer-events: all; }
-
-    /* 1. Переверни телефон */
-    #s1 #hint {
-      font-size: 6vw;
-      text-align: center;
-      line-height: 1.4;
-      padding: 0 10vw;
-      animation: pulse 2.5s infinite;
-      z-index: 2;
-    }
-    #s1 img { max-width: 70vw; max-height: 35vh; margin: 40px 0; z-index: 2; }
-    @keyframes pulse { 0%,100%{opacity:0.7} 50%{opacity:1} }
-
-    /* 3. Отсчёт */
-    #count {
-      font-size: 28vw;
-      font-weight: 900;
-      color: #d500ff;
-      text-shadow: 0 0 50px #d500ff, 0 0 100px #d500ff88;
-      letter-spacing: -8px;
-      z-index: 2;
+      position:fixed;
+      inset:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity 0.8s ease;
+      z-index:1;
     }
 
-    /* 4. Слова */
-    .word {
-      font-size: 12vw;
-      font-weight: bold;
-      margin: 15px 0;
-      opacity: 0;
-      transform: scale(0.5);
-      transition: all 1.3s ease-out;
-      text-shadow: 0 0 30px currentColor;
-      z-index: 2;
+    section.active {
+      opacity:1;
+      pointer-events:all;
     }
-    .word.show { opacity: 1; transform: scale(1); }
-    .big-heart { font-size: 20vw; color: #d500ff; animation: beat 1.5s infinite; }
-    @keyframes beat { 0%,100%{transform:scale(1)} 50%{transform:scale(1.18)} }
-    #gif2 { max-width: 70vw; margin-top: 40px; opacity: 0; transition: opacity 1.2s; z-index: 2; }
 
-    /* 5. Открытка + финал */
-    #card-wrap {
-      width: 90vw;
-      max-width: 380px;
-      height: 70vh;
-      max-height: 520px;
-      perspective: 1400px;
-      z-index: 2;
+    /* Сцена 1 — поворот */
+    #scene1 #hint {
+      font-size:6.5vw;
+      text-align:center;
+      line-height:1.4;
+      padding:0 12vw;
+      animation:pulse 2.8s infinite;
     }
+
+    #scene1 img {
+      max-width:75vw;
+      max-height:38vh;
+      margin:45px 0;
+    }
+
+    @keyframes pulse { 0%,100%{opacity:0.65} 50%{opacity:1} }
+
+    /* Отсчёт */
+    #countdown {
+      font-size:32vw;
+      font-weight:900;
+      color:#d500ff;
+      text-shadow:0 0 60px #d500ff, 0 0 120px #d500ff88;
+      letter-spacing:-10px;
+    }
+
+    /* Слова */
+    .phrase {
+      font-size:13vw;
+      font-weight:bold;
+      margin:18px 0;
+      opacity:0;
+      transform:scale(0.4);
+      transition:all 1.4s ease-out;
+      text-shadow:0 0 35px currentColor;
+    }
+
+    .phrase.visible {
+      opacity:1;
+      transform:scale(1);
+    }
+
+    .heart-big {
+      font-size:22vw;
+      color:#d500ff;
+      animation:heartbeat 1.6s infinite;
+    }
+
+    @keyframes heartbeat {
+      0%,100% { transform:scale(1); }
+      50%     { transform:scale(1.2); }
+    }
+
+    #congrats-gif {
+      max-width:75vw;
+      margin-top:50px;
+      opacity:0;
+      transition:opacity 1.4s;
+    }
+
+    /* Открытка */
+    #card-container {
+      width:92vw;
+      max-width:400px;
+      height:72vh;
+      max-height:540px;
+      perspective:1500px;
+    }
+
     #card {
-      width: 100%; height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 1.6s cubic-bezier(0.68, -0.4, 0.265, 1.4);
+      width:100%;
+      height:100%;
+      position:relative;
+      transform-style:preserve-3d;
+      transition:transform 1.7s cubic-bezier(0.68,-0.55,0.265,1.55);
     }
+
     .face {
-      position: absolute;
-      inset: 0;
-      backface-visibility: hidden;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 12px 50px #000c;
+      position:absolute;
+      inset:0;
+      backface-visibility:hidden;
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:0 14px 60px #000c;
     }
+
     .front {
-      background: linear-gradient(135deg, #2a0047, #6000a8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11vw;
-      font-weight: bold;
-      color: #ffccff;
-      text-shadow: 0 0 25px #fff8;
-    }
-    .back { transform: rotateY(180deg); background: #111; }
-    .back img { width: 100%; height: 100%; object-fit: cover; }
-    .bubble {
-      position: absolute;
-      top: 10%; left: 8%; right: 8%;
-      background: rgba(255,255,255,0.95);
-      color: #1a0033;
-      padding: 16px 20px;
-      border-radius: 18px;
-      font-size: 4.8vw;
-      line-height: 1.4;
-      box-shadow: 0 5px 20px #0009;
-      pointer-events: none;
+      background:linear-gradient(135deg,#30004a,#7000b0);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12vw;
+      font-weight:bold;
+      color:#ffdfff;
+      text-shadow:0 0 30px #fff8;
     }
 
-    #final {
-      width: 80vw; max-width: 360px;
-      height: 80vw; max-height: 360px;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 0 70px #d500ffaa, 0 0 140px #d500ff66;
-      opacity: 0; transform: scale(0.2);
-      transition: all 2s ease-out;
-      z-index: 2;
-    }
-    #final.show { opacity: 1; transform: scale(1); }
+    .back { transform:rotateY(180deg); background:#111; }
 
-    #swipe-zone { position: fixed; inset: 0; z-index: 10; touch-action: pan-y; }
+    .back img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .speech-bubble {
+      position:absolute;
+      top:8%;
+      left:8%;
+      right:8%;
+      background:rgba(255,255,255,0.96);
+      color:#180033;
+      padding:18px 22px;
+      border-radius:20px;
+      font-size:5vw;
+      line-height:1.4;
+      box-shadow:0 6px 25px #000a;
+      pointer-events:none;
+    }
+
+    /* Финальное сердце */
+    #heart-final {
+      width:82vw;
+      max-width:380px;
+      height:82vw;
+      max-height:380px;
+      border-radius:50%;
+      object-fit:cover;
+      box-shadow:0 0 80px #d500ffaa, 0 0 160px #d500ff55;
+      opacity:0;
+      transform:scale(0.1);
+      transition:all 2.2s ease-out;
+    }
+
+    #heart-final.visible {
+      opacity:1;
+      transform:scale(1);
+    }
+
+    #touch-zone {
+      position:fixed;
+      inset:0;
+      z-index:999;
+      touch-action:pan-y;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Дождь как постоянный фон -->
-  <div id="rain-bg"></div>
+  <!-- Дождь — постоянный фон -->
+  <div id="rain"></div>
 
-  <section id="s1" class="active">
+  <!-- Сцена 1 -->
+  <section id="scene1" class="active">
     <div id="hint">Переверни телефон<br>горизонтально 😍</div>
-    <img src="gif1.gif" alt="поворот">
+    <img src="gif1.gif" alt="поворот телефона">
   </section>
 
-  <section id="s3">
-    <div id="count">3</div>
+  <!-- Сцена отсчёта -->
+  <section id="scene-count">
+    <div id="countdown">3</div>
   </section>
 
-  <section id="s4">
-    <div class="word" id="w1">С</div>
-    <div class="word" id="w2">Праздником</div>
-    <div class="word" id="w3">Родная</div>
-    <div class="word" id="w4"><span class="big-heart">❤️</span></div>
-    <img id="gif2" src="gif2.gif" alt="поздравление">
+  <!-- Сцена слов + гифка -->
+  <section id="scene-words">
+    <div class="phrase" id="ph1">С</div>
+    <div class="phrase" id="ph2">Праздником</div>
+    <div class="phrase" id="ph3">Родная</div>
+    <div class="phrase" id="ph4"><span class="heart-big">❤️</span></div>
+    <img id="congrats-gif" src="gif2.gif" alt="с праздником">
   </section>
 
-  <section id="s5">
-    <div id="card-wrap">
+  <!-- Сцена открытки -->
+  <section id="scene-card">
+    <div id="card-container">
       <div id="card">
         <div class="face front">Открытка</div>
         <div class="face back">
-          <img src="photo1.jpg" alt="фото">
-          <div class="bubble">Люблю тебя безумно! 💜</div>
+          <img src="photo1.jpg" alt="твоё фото">
+          <div class="speech-bubble">Люблю тебя безумно! 💜</div>
         </div>
       </div>
     </div>
-    <img id="final" src="photo-heart.jpg" alt="сердце">
+    <img id="heart-final" src="photo-heart.jpg" alt="сердце из фото">
   </section>
 
-  <div id="swipe-zone"></div>
+  <div id="touch-zone"></div>
 
 <script>
-let current = 1;
-const sections = document.querySelectorAll('section');
+let currentScene = 1;
+const scenes = [
+  document.getElementById('scene1'),
+  document.getElementById('scene-count'),
+  document.getElementById('scene-words'),
+  document.getElementById('scene-card')
+];
 
-function show(n) {
-  sections.forEach(s => s.classList.remove('active'));
-  if (sections[n-1]) sections[n-1].classList.add('active');
-  current = n;
+function activateScene(n) {
+  scenes.forEach(s => s.classList.remove('active'));
+  if (scenes[n-1]) scenes[n-1].classList.add('active');
+  currentScene = n;
 }
 
-let touchStart = 0;
-const swipe = document.getElementById('swipe-zone');
+let startY = 0;
+const touchZone = document.getElementById('touch-zone');
 
-swipe.addEventListener('touchstart', e => touchStart = e.touches[0].clientY, {passive:true});
-swipe.addEventListener('touchend', e => {
-  const diff = touchStart - e.changedTouches[0].clientY;
-  if (Math.abs(diff) > 70) {
-    if (diff > 0) nextStep();
-    else if (current === 5) prevStep();
+touchZone.addEventListener('touchstart', e => {
+  startY = e.touches[0].clientY;
+}, {passive: true});
+
+touchZone.addEventListener('touchend', e => {
+  const delta = startY - e.changedTouches[0].clientY;
+  if (Math.abs(delta) > 80) {
+    if (delta > 0) next();
+    else if (currentScene === 4) back();
   }
-}, {passive:true});
+}, {passive: true});
 
-function nextStep() {
-  if (current === 1) {
-    show(3);
-    setTimeout(startCountdown, 700);
+function next() {
+  if (currentScene === 1) {
+    activateScene(2);
+    startCountdown();
   }
 }
 
-function prevStep() {
-  if (current === 5) {
-    card.classList.remove('flip');
+function back() {
+  if (currentScene === 4) {
+    card.classList.remove('opened');
     card.style.transform = 'rotateY(0deg)';
-    setTimeout(() => document.getElementById('final').classList.remove('show'), 1000);
+    setTimeout(() => {
+      document.getElementById('heart-final').classList.remove('visible');
+    }, 1200);
   }
 }
 
-// Постоянный дождь-фон
-function startRain() {
-  const container = document.getElementById('rain-bg');
-  container.innerHTML = '';
+// Дождь
+function initRain() {
+  const rain = document.getElementById('rain');
+  rain.innerHTML = '';
 
-  const chars = 'СПРАЗДНИКОМ!!!❤️💜   ЛЮБЛЮТЕБЯ!!!';
+  const chars = 'СПРАЗДНИКОМ!!!❤️💜ЛЮБЛЮТЕБЯРОДНАЯ!!!   ';
 
-  const columns = Math.floor(window.innerWidth / 16) + 16;
+  const cols = Math.floor(window.innerWidth / 15) + 18;
 
-  for (let i = 0; i < columns; i++) {
-    const column = document.createElement('div');
-    column.className = 'col';
-    column.style.left = `${i * 3}vw`;
-    column.style.animationDuration = `${8 + Math.random() * 20}s`;
-    column.style.animationDelay = `-${Math.random() * 15}s`;
+  for (let i = 0; i < cols; i++) {
+    const col = document.createElement('div');
+    col.className = 'column';
+    col.style.left = `${i * 2.8}vw`;
+    col.style.animationDuration = `${7 + Math.random() * 22}s`;
+    col.style.animationDelay = `-${Math.random() * 18}s`;
 
-    let content = '';
-    const length = 35 + Math.floor(Math.random() * 50);
+    let str = '';
+    const len = 40 + Math.floor(Math.random() * 60);
 
-    for (let j = 0; j < length; j++) {
-      const char = chars[Math.floor(Math.random() * chars.length)];
-      if (j === 0) content += `<span class="lead">${char}</span>`;
-      else if (j < 8) content += `<span>${char}</span>`;
-      else content += `<span class="fade">${char}</span>`;
+    for (let j = 0; j < len; j++) {
+      const ch = chars[Math.floor(Math.random() * chars.length)];
+      if (j === 0) str += `<span class="lead">${ch}</span>`;
+      else if (j < 9) str += `<span>${ch}</span>`;
+      else str += `<span class="fade">${ch}</span>`;
     }
 
-    // Вставляем фразы чаще
-    if (Math.random() < 0.6) {
-      const phrases = ['С П Р А З Д Н И К О М ! ! !', 'Л Ю Б Л Ю   Т Е Б Я', 'С Д Н Ё М   Р О Ж Д Е Н И Я !!!'];
-      const phrase = phrases[Math.floor(Math.random() * phrases.length)];
-      const pos = Math.floor(Math.random() * (length - phrase.length / 2));
-      content = content.substring(0, pos * 12) + phrase + content.substring((pos + phrase.length) * 12);
+    if (Math.random() < 0.55) {
+      const phr = ['С П Р А З Д Н И К О М ! ! !', 'Л Ю Б Л Ю   Т Е Б Я', 'С Д Н Ё М   Р О Ж Д Е Н И Я !!!'][Math.floor(Math.random()*3)];
+      const pos = Math.floor(Math.random() * (len - 12));
+      str = str.substring(0, pos*12) + phr + str.substring((pos + phr.length)*12);
     }
 
-    column.innerHTML = content;
-    container.appendChild(column);
+    col.innerHTML = str;
+    rain.appendChild(col);
   }
 
-  // Бесконечно обновляем дождь
-  setTimeout(startRain, 15000 + Math.random() * 10000);
+  setTimeout(initRain, 14000 + Math.random() * 12000);
 }
 
-// Запускаем дождь сразу и навсегда
-startRain();
+// Запуск дождя сразу
+initRain();
 
 // Отсчёт
 function startCountdown() {
-  const el = document.getElementById('count');
+  const cd = document.getElementById('countdown');
   let num = 3;
-  el.textContent = num;
+  cd.textContent = num;
 
-  const timer = setInterval(() => {
+  const t = setInterval(() => {
     num--;
-    el.textContent = num;
+    cd.textContent = num;
     if (num <= 0) {
-      clearInterval(timer);
+      clearInterval(t);
       setTimeout(() => {
-        show(4);
-        showWords();
-      }, 1000);
+        activateScene(3);
+        showPhrases();
+      }, 1200);
     }
-  }, 1400);
+  }, 1500);
 }
 
-// Слова
-function showWords() {
-  const words = [
-    document.getElementById('w1'),
-    document.getElementById('w2'),
-    document.getElementById('w3'),
-    document.getElementById('w4')
+// Появление слов
+function showPhrases() {
+  const ph = [
+    document.getElementById('ph1'),
+    document.getElementById('ph2'),
+    document.getElementById('ph3'),
+    document.getElementById('ph4')
   ];
 
-  let idx = 0;
-  const interval = setInterval(() => {
-    if (idx > 0) words[idx - 1].classList.remove('show');
-    if (idx < words.length) {
-      words[idx].classList.add('show');
-      idx++;
+  let i = 0;
+  const iv = setInterval(() => {
+    if (i > 0) ph[i-1].classList.remove('visible');
+    if (i < ph.length) {
+      ph[i].classList.add('visible');
+      i++;
     } else {
-      clearInterval(interval);
-      setTimeout(() => document.getElementById('gif2').style.opacity = '1', 1800);
-      setTimeout(() => show(5), 5200);
+      clearInterval(iv);
+      setTimeout(() => {
+        document.getElementById('congrats-gif').style.opacity = '1';
+      }, 2000);
+      setTimeout(() => activateScene(4), 5800);
     }
-  }, 2200);
+  }, 2400);
 }
 
 // Открытка
 const card = document.getElementById('card');
 card.addEventListener('click', () => {
-  card.classList.toggle('flip');
-  card.style.transform = card.classList.contains('flip')
+  card.classList.toggle('opened');
+  card.style.transform = card.classList.contains('opened')
     ? 'rotateY(180deg)'
     : 'rotateY(0deg)';
 });
 
 // Финальное сердце
-swipe.addEventListener('touchend', e => {
-  if (current !== 5) return;
-  const diff = touchStart - e.changedTouches[0].clientY;
-  if (diff > 100 && card.classList.contains('flip')) {
-    card.classList.remove('flip');
+touchZone.addEventListener('touchend', e => {
+  if (currentScene !== 4) return;
+  const delta = startY - e.changedTouches[0].clientY;
+  if (delta > 110 && card.classList.contains('opened')) {
+    card.classList.remove('opened');
     card.style.transform = 'rotateY(0deg)';
-    setTimeout(() => document.getElementById('final').classList.add('show'), 1200);
+    setTimeout(() => {
+      document.getElementById('heart-final').classList.add('visible');
+    }, 1400);
   }
 });
 
-// Автозапуск, если уже в горизонтальном положении
+// Если уже горизонтально — пропустить первую сцену
 if (window.innerWidth > window.innerHeight) {
-  nextStep();
+  activateScene(2);
+  startCountdown();
 }
 </script>
 </body>

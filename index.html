@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>С праздником, родная! 💜</title>
 
-  <!-- Preload важных ресурсов -->
+  <!-- Preload ресурсов -->
   <link rel="preload" as="image" href="gif2.gif">
   <link rel="preload" as="image" href="photo1.jpg">
   <link rel="preload" as="image" href="photo2.jpg">
@@ -127,16 +127,37 @@
       font-weight: bold;
       color: #ffffff;
       text-shadow: 0 0 40px #fff9;
+      z-index: 2;
     }
     .back {
       transform: rotateY(180deg);
       background: #000;
+      z-index: 1;
     }
     .back img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+      /* Если фото всё равно не видно — закомментируй следующую строку: */
+      /* clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%); */
+    }
+
+    /* ─── Фикс видимости фото после открытия ─── */
+    #card.flipped .front {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    #card .back,
+    #card.flipped .back {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    #card-photo {
+      opacity: 1 !important;
+      display: block !important;
     }
 
     .bubble {
@@ -152,6 +173,7 @@
       line-height: 1.45;
       box-shadow: 0 8px 30px #000c;
       pointer-events: none;
+      z-index: 3;
     }
 
     #final-heart-container {
@@ -229,6 +251,10 @@
       touch-action: manipulation;
     }
     .btn:active { transform: scale(0.95); }
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -265,8 +291,8 @@
 
     <div class="buttons" id="card-buttons">
       <button class="btn" id="btn-open">Открыть</button>
-      <button class="btn" id="btn-next">Следующее фото</button>
-      <button class="btn" id="btn-heart">Сердечко</button>
+      <button class="btn" id="btn-next" disabled>Следующее фото</button>
+      <button class="btn" id="btn-heart" disabled>Сердечко</button>
     </div>
   </section>
 
@@ -274,7 +300,6 @@
 const photos = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg'];
 let photoIndex = 0;
 
-// ─── Дождь ────────────────────────────────────────
 function initRain() {
   const rain = document.getElementById('rain-bg');
   rain.innerHTML = '';
@@ -298,12 +323,7 @@ function initRain() {
     }
 
     if (Math.random() < 0.7) {
-      const phrases = [
-        'С П Р А З Д Н И К О М ! ! !',
-        'С ПРАЗДНИКОМ!!! ❤️',
-        'Л Ю Б Л Ю Т Е Б Я',
-        'С Д Н Ё М Р О Ж Д Е Н И Я !!!'
-      ];
+      const phrases = ['С П Р А З Д Н И К О М ! ! !', 'С ПРАЗДНИКОМ!!! ❤️', 'Л Ю Б Л Ю Т Е Б Я', 'С Д Н Ё М Р О Ж Д Е Н И Я !!!'];
       const ph = phrases[Math.floor(Math.random() * phrases.length)];
       const pos = Math.floor(Math.random() * (len - 15));
       text = text.slice(0, pos) + ph + text.slice(pos + ph.length);
@@ -314,7 +334,6 @@ function initRain() {
   }
 }
 
-// ─── Сцены ─────────────────────────────────────────
 const sections = [
   document.getElementById('count-section'),
   document.getElementById('words-section'),
@@ -322,54 +341,38 @@ const sections = [
 ];
 
 function showSection(idx) {
-  sections.forEach((s, i) => {
-    s.classList.toggle('active', i === idx);
-  });
+  sections.forEach((s, i) => s.classList.toggle('active', i === idx));
   if (idx === 2) {
     setTimeout(() => document.getElementById('card-buttons').classList.add('visible'), 600);
   }
 }
 
-// ─── Анимации слов ─────────────────────────────────
 async function showWords() {
-  const words = [
-    document.getElementById('w1'),
-    document.getElementById('w2'),
-    document.getElementById('w3'),
-    document.getElementById('w4')
-  ];
-
+  const words = [document.getElementById('w1'), document.getElementById('w2'), document.getElementById('w3'), document.getElementById('w4')];
   for (const el of words) {
     el.classList.add('visible');
     await new Promise(r => setTimeout(r, 2600));
     if (el !== words.at(-1)) el.classList.remove('visible');
   }
-
   document.getElementById('gif2').style.opacity = '1';
   await new Promise(r => setTimeout(r, 4200));
   showSection(2);
 }
 
-// ─── Обратный отсчёт ───────────────────────────────
 function countdown() {
   const el = document.getElementById('count');
   let n = 3;
   el.textContent = n;
-
   const interval = setInterval(() => {
     n--;
     el.textContent = n;
     if (n <= 0) {
       clearInterval(interval);
-      setTimeout(() => {
-        showSection(1);
-        showWords();
-      }, 1400);
+      setTimeout(() => { showSection(1); showWords(); }, 1400);
     }
   }, 1600);
 }
 
-// ─── Карточка ──────────────────────────────────────
 const card = document.getElementById('card');
 const cardPhoto = document.getElementById('card-photo');
 const btnOpen  = document.getElementById('btn-open');
@@ -398,21 +401,16 @@ btnHeart.addEventListener('click', () => {
   }, 900);
 });
 
-// ─── Запуск ────────────────────────────────────────
 function startExperience() {
   initRain();
   countdown();
 }
 
-// Запускаем при загрузке + при смене ориентации
 window.addEventListener('load', startExperience);
 window.addEventListener('orientationchange', () => setTimeout(startExperience, 400));
 window.addEventListener('resize', () => {
-  // debounce на resize
   clearTimeout(window.resizeTimer);
-  window.resizeTimer = setTimeout(() => {
-    initRain(); // перезапускаем дождь при сильном изменении размера
-  }, 300);
+  window.resizeTimer = setTimeout(initRain, 300);
 });
 </script>
 </body>

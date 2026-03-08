@@ -39,7 +39,6 @@
       0% { transform:translateY(-220%); }
       100% { transform:translateY(240vh); }
     }
-
     section {
       position:fixed;
       inset:0;
@@ -54,15 +53,35 @@
       z-index:2;
     }
     section.active { opacity:1; pointer-events:all; }
-
-    #count { font-size:38vw; font-weight:900; color:#d500ff; text-shadow:0 0 80px #d500ff, 0 0 160px #d500ffaa; letter-spacing:-14px; margin-top:8vh; }
-    .phrase { font-size: clamp(9vw, 13vw, 80px); font-weight:bold; margin:16px 0; opacity:0; transform:scale(0.3); transition:all 1.6s ease-out; text-shadow:0 0 45px currentColor; }
+    #count {
+      font-size:38vw;
+      font-weight:900;
+      color:#d500ff;
+      text-shadow:0 0 80px #d500ff, 0 0 160px #d500ffaa;
+      letter-spacing:-14px;
+      margin-top:8vh;
+    }
+    .phrase {
+      font-size: clamp(9vw, 13vw, 80px);
+      font-weight:bold;
+      margin:16px 0;
+      opacity:0;
+      transform:scale(0.3);
+      transition:all 1.6s ease-out;
+      text-shadow:0 0 45px currentColor;
+    }
     .phrase.visible { opacity:1; transform:scale(1); }
     .big-heart { font-size: clamp(18vw, 24vw, 140px); color:#d500ff; animation:beat 1.8s infinite; }
     @keyframes beat { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
-    #gif2 { max-width:82vw; margin:4vh 0 8vh; opacity:0; transition:opacity 1.6s; }
+    #gif2 {
+      max-width:82vw;
+      margin-top:4vh;
+      margin-bottom:8vh;
+      opacity:0;
+      transition:opacity 1.6s;
+    }
 
-    /* ==================== СЛАЙДЕР ФОТО ==================== */
+    /* Слайдер вместо открытки */
     #photos-section {
       position:fixed;
       inset:0;
@@ -74,125 +93,145 @@
     #photos-section.active { display:flex; }
 
     .slider {
-      width: 92vw;
-      max-width: 420px;
-      height: 65vh;
-      max-height: 520px;
-      position: relative;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 0 60px #d500ff66;
+      width:92vw;
+      max-width:420px;
+      height:65vh;
+      max-height:520px;
+      position:relative;
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:0 0 60px #d500ff66;
     }
     .slide {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 1.2s ease;
-      object-fit: cover;
+      position:absolute;
+      inset:0;
+      opacity:0;
+      transition:opacity 1.2s ease;
+      object-fit:cover;
     }
-    .slide.active {
-      opacity: 1;
-      z-index: 2;
-    }
+    .slide.active { opacity:1; z-index:2; }
 
     .slider-controls {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 12px;
-      z-index: 10;
+      position:absolute;
+      bottom:20px;
+      left:50%;
+      transform:translateX(-50%);
+      display:flex;
+      gap:12px;
+      z-index:10;
     }
     .dot {
-      width: 12px;
-      height: 12px;
-      background: rgba(255,255,255,0.4);
-      border-radius: 50%;
-      transition: all 0.4s;
+      width:12px;
+      height:12px;
+      background:rgba(255,255,255,0.4);
+      border-radius:50%;
+      transition:all 0.4s;
     }
     .dot.active {
-      background: #d500ff;
-      transform: scale(1.4);
+      background:#d500ff;
+      transform:scale(1.4);
     }
 
     #final-heart-container {
-      position: relative;
-      width: 86vw;
-      max-width: 420px;
-      height: 86vw;
-      max-height: 420px;
-      margin-top: 6vh;
-      opacity: 0;
-      transition: opacity 2s ease;
+      position:relative;
+      width:86vw;
+      max-width:420px;
+      height:86vw;
+      max-height:420px;
+      margin-top:6vh;
+      opacity:0;
+      transition:opacity 2s ease;
     }
-    #final-heart-container.visible {
-      opacity: 1;
-    }
+    #final-heart-container.visible { opacity:1; }
     #final-heart {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 0 100px #d500ffcc, 0 0 200px #d500ff77;
-      animation: pulse-glow 3s infinite alternate;
+      width:100%;
+      height:100%;
+      border-radius:50%;
+      object-fit:cover;
+      box-shadow:0 0 100px #d500ffcc, 0 0 200px #d500ff77;
+      animation:pulse-glow 3s infinite alternate;
     }
     @keyframes pulse-glow {
-      0% { box-shadow: 0 0 100px #d500ff88, 0 0 200px #d500ff44; }
-      100% { box-shadow: 0 0 140px #d500ffff, 0 0 280px #d500ffaa; }
+      0% { box-shadow:0 0 100px #d500ff88, 0 0 200px #d500ff44; }
+      100% { box-shadow:0 0 140px #d500ffff, 0 0 280px #d500ffaa; }
     }
     #congrats-text {
-      position: absolute;
-      top: -8vh;
-      left: 0; right: 0;
-      font-size: 8vw;
-      font-weight: bold;
-      color: #d500ff;
-      text-shadow: 0 0 30px #d500ff, 0 0 60px #d500ff88;
-      white-space: nowrap;
-      animation: marquee 12s linear infinite;
-      opacity: 0;
-      transition: opacity 1.5s;
+      position:absolute;
+      top:-8vh;
+      left:0; right:0;
+      font-size:8vw;
+      font-weight:bold;
+      color:#d500ff;
+      text-shadow:0 0 30px #d500ff, 0 0 60px #d500ff88;
+      white-space:nowrap;
+      animation:marquee 12s linear infinite;
+      opacity:0;
+      transition:opacity 1.5s;
     }
-    #congrats-text.visible { opacity: 1; }
+    #congrats-text.visible { opacity:1; }
     @keyframes marquee {
-      0% { transform: translateX(120vw); }
-      100% { transform: translateX(-120vw); }
+      0% { transform:translateX(120vw); }
+      100% { transform:translateX(-120vw); }
     }
-
     .buttons {
-      position: fixed;
-      bottom: 5vh;
-      left: 5vw;
-      right: 5vw;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      z-index: 10;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.6s;
+      position:fixed;
+      bottom:5vh;
+      left:5vw;
+      right:5vw;
+      display:flex;
+      justify-content:center;
+      gap:20px;
+      flex-wrap:wrap;
+      z-index:10;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity 0.6s;
     }
-    .buttons.visible { opacity: 1; pointer-events: all; }
+    .buttons.visible { opacity:1; pointer-events:all; }
     .btn {
-      padding: 12px 28px;
-      font-size: 4.5vw;
-      min-width: 120px;
-      max-width: 45%;
-      font-weight: bold;
-      background: #d500ff;
-      color: #000;
-      border: none;
-      border-radius: 16px;
-      box-shadow: 0 6px 20px #d500ff66;
-      cursor: pointer;
+      padding:12px 28px;
+      font-size:4.5vw;
+      min-width:120px;
+      max-width:45%;
+      font-weight:bold;
+      background:#d500ff;
+      color:#000;
+      border:none;
+      border-radius:16px;
+      box-shadow:0 6px 20px #d500ff66;
+      cursor:pointer;
+      touch-action:manipulation;
     }
-    .btn:active { transform: scale(0.95); }
+    .btn:active { transform:scale(0.95); }
+
+    /* Кнопка старта */
+    #start-btn {
+      position:fixed;
+      inset:0;
+      margin:auto;
+      width:80vw;
+      max-width:360px;
+      height:120px;
+      font-size:clamp(28px,8vw,48px);
+      font-weight:bold;
+      background:linear-gradient(135deg,#d500ff,#9000d0);
+      color:#fff;
+      border:none;
+      border-radius:30px;
+      box-shadow:0 0 60px #d500ffaa;
+      cursor:pointer;
+      z-index:9999;
+      transition:all 0.5s ease;
+    }
+    #start-btn:hover { transform:scale(1.08); }
+    #start-btn:active { transform:scale(0.95); }
   </style>
 </head>
 <body>
   <div id="rain-bg"></div>
+
+  <!-- Стартовая кнопка -->
+  <button id="start-btn">Нажми, чтобы начать 💜</button>
 
   <section id="count-section" class="active">
     <div id="count">3</div>
@@ -206,7 +245,7 @@
     <img id="gif2" src="gif2.gif" alt="поздравление">
   </section>
 
-  <!-- Новый слайдер вместо открытки -->
+  <!-- Слайдер фото -->
   <div id="photos-section">
     <div class="slider" id="slider">
       <img class="slide" src="photo1.jpg" alt="">
@@ -231,7 +270,7 @@
   </audio>
 
 <script>
-// ====================== ДОЖДЬ ======================
+// Дождь
 function startRain() {
   const rain = document.getElementById('rain-bg');
   rain.innerHTML = '';
@@ -263,7 +302,7 @@ function startRain() {
 }
 startRain();
 
-// ====================== СЦЕНЫ ======================
+// Сцены
 const sections = [
   document.getElementById('count-section'),
   document.getElementById('words-section')
@@ -275,7 +314,7 @@ function show(idx) {
   cur = idx;
 }
 
-// ====================== ОТСЧЁТ И СЛОВА ======================
+// Отсчёт и слова
 function countdown() {
   const el = document.getElementById('count');
   let n = 3;
@@ -311,12 +350,12 @@ function showWords() {
       setTimeout(() => {
         document.getElementById('gif2').style.opacity = '1';
       }, 2400);
-      setTimeout(() => startPhotoSlider(), 6800);   // ← переходим к слайдеру
+      setTimeout(() => startPhotoSlider(), 6800);
     }
   }, 2800);
 }
 
-// ====================== АВТОСЛАЙДЕР ФОТО ======================
+// Слайдер
 const slides = document.querySelectorAll('.slide');
 const dotsContainer = document.getElementById('dots');
 let currentSlide = 0;
@@ -349,22 +388,14 @@ function startPhotoSlider() {
   document.getElementById('photos-section').classList.add('active');
   createDots();
   goToSlide(0);
-  
-  slideInterval = setInterval(nextSlide, 3500);   // меняется каждые 3.5 секунды
-
-  // Показываем кнопки через 2 секунды после начала слайдера
-  setTimeout(() => {
-    document.getElementById('card-buttons').classList.add('visible');
-  }, 2000);
+  slideInterval = setInterval(nextSlide, 3500);
 }
 
-// ====================== КНОПКИ ======================
+// Сердечко
 const btnHeart = document.getElementById('btn-heart');
-
 btnHeart.addEventListener('click', () => {
-  clearInterval(slideInterval);                    // останавливаем слайдер
+  clearInterval(slideInterval);
   document.getElementById('photos-section').style.opacity = '0';
-  
   setTimeout(() => {
     document.getElementById('photos-section').style.display = 'none';
     document.getElementById('final-heart-container').classList.add('visible');
@@ -373,25 +404,30 @@ btnHeart.addEventListener('click', () => {
   }, 800);
 });
 
-// ====================== МУЗЫКА ======================
+// Музыка
 const music = document.getElementById('bg-music');
 music.volume = 0.3;
 
+// Стартовая кнопка
+const startBtn = document.getElementById('start-btn');
+startBtn.addEventListener('click', () => {
+  music.muted = false;
+  music.play().catch(e => console.log('Музыка запущена:', e));
+
+  startBtn.style.opacity = '0';
+  startBtn.style.pointerEvents = 'none';
+  setTimeout(() => startBtn.remove(), 1000);
+
+  countdown();
+});
+
+// Дополнительный клик по странице — для музыки
 document.body.addEventListener('click', () => {
   if (music.paused || music.muted) {
     music.muted = false;
     music.play();
   }
 }, { once: true });
-
-// ====================== ЗАПУСК ======================
-function checkAndStart() {
-  countdown();
-}
-checkAndStart();
-
-window.addEventListener('orientationchange', () => setTimeout(checkAndStart, 300));
-window.addEventListener('resize', () => setTimeout(checkAndStart, 300));
 </script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
@@ -5,443 +6,135 @@
   <title>С праздником, родная! 💜</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body, html {
-      height:100%;
-      font-family:system-ui, sans-serif;
-      background:#000;
-      color:#fff;
-      overflow:hidden;
-      touch-action:manipulation;
-    }
+    body, html { height:100%; font-family:system-ui,sans-serif; background:#000; color:#fff; overflow:hidden; touch-action:manipulation; }
 
-    #rain-bg {
-      position:fixed;
-      inset:0;
-      overflow:hidden;
-      z-index:-1;
-      pointer-events:none;
-    }
+    #rain-bg { position:fixed; inset:0; overflow:hidden; z-index:-1; pointer-events:none; }
 
-    .rain-col {
-      position:absolute;
-      top:-220vh;
-      font-family:'Courier New', monospace;
-      font-size:1.35rem;
-      line-height:1.0;
-      color:#c300ff;
-      text-shadow:0 0 15px #c300ffcc, 0 0 30px #c300ff88;
-      white-space:pre;
-      animation:fall linear infinite;
-    }
+    .rain-col { position:absolute; top:-220vh; font-family:'Courier New',monospace; font-size:1.35rem; line-height:1.0; color:#c300ff; text-shadow:0 0 15px #c300ffcc,0 0 30px #c300ff88; white-space:pre; animation:fall linear infinite; }
+    .lead { color:#fff; text-shadow:0 0 25px #fff,0 0 50px #c300ff; font-weight:bold; }
+    .fade { opacity:0.48; }
+    @keyframes fall { 0%{transform:translateY(-220%)} 100%{transform:translateY(240vh)} }
 
-    .lead { color:#ffffff; text-shadow:0 0 25px #fff, 0 0 50px #c300ff; font-weight:bold; }
-    .fade  { opacity:0.48; }
-
-    @keyframes fall {
-      0%   { transform:translateY(-220%); }
-      100% { transform:translateY(240vh); }
-    }
-
-    section {
-      position:fixed;
-      inset:0;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:flex-start;
-      padding-top:12vh;
-      opacity:0;
-      pointer-events:none;
-      transition:opacity 0.9s ease;
-      z-index:2;
-    }
-
+    section { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:12vh; opacity:0; pointer-events:none; transition:opacity .9s; z-index:2; }
     section.active { opacity:1; pointer-events:all; }
 
-    #count {
-      font-size:38vw;
-      font-weight:900;
-      color:#d500ff;
-      text-shadow:0 0 80px #d500ff, 0 0 160px #d500ffaa;
-      letter-spacing:-14px;
-      margin-top:8vh;
-    }
+    #count { font-size:38vw; font-weight:900; color:#d500ff; text-shadow:0 0 80px #d500ff,0 0 160px #d500ffaa; letter-spacing:-14px; margin-top:8vh; }
 
-    .phrase {
-      font-size: clamp(9vw, 13vw, 80px);
-      font-weight:bold;
-      margin:16px 0;
-      opacity:0;
-      transform:scale(0.3);
-      transition:all 1.6s ease-out;
-      text-shadow:0 0 45px currentColor;
-    }
-
+    .phrase { font-size:clamp(9vw,13vw,80px); font-weight:bold; margin:16px 0; opacity:0; transform:scale(.3); transition:all 1.6s ease-out; text-shadow:0 0 45px currentColor; }
     .phrase.visible { opacity:1; transform:scale(1); }
-
-    .big-heart { font-size: clamp(18vw, 24vw, 140px); color:#d500ff; animation:beat 1.8s infinite; }
-
+    .big-heart { font-size:clamp(18vw,24vw,140px); color:#d500ff; animation:beat 1.8s infinite; }
     @keyframes beat { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
 
-    #gif2 {
-      max-width:82vw;
-      margin-top:4vh;
-      margin-bottom:8vh;
-      opacity:0;
-      transition:opacity 1.6s;
-    }
+    #gif2 { max-width:82vw; margin-top:2vh; margin-bottom:6vh; opacity:0; transition:opacity 1.6s; }
 
-    #card-container {
-      width: 90vw;
-      max-width: 380px;
-      height: 58vh;
-      max-height: 500px;
-      perspective: 1700px;
-      margin-top: 6vh;
-    }
+    #card-container { width:90vw; max-width:380px; height:58vh; max-height:500px; perspective:1700px; margin-top:6vh; }
 
     #card {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 1.9s cubic-bezier(0.68, -0.6, 0.265, 1.6);
-      clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+      width:100%; height:100%;
+      position:relative;
+      transform-style:preserve-3d;
+      transition:transform 1.9s cubic-bezier(0.68,-0.6,0.265,1.6);
+      clip-path: polygon(
+        50% 0%,
+        61% 5%,
+        73% 15%,
+        85% 35%,
+        95% 60%,
+        90% 80%,
+        75% 95%,
+        50% 100%,
+        25% 95%,
+        10% 80%,
+        5% 60%,
+        15% 35%,
+        27% 15%,
+        39% 5%
+      ); /* настоящее сердце */
     }
 
-    .face {
-      position: absolute;
-      inset: 0;
-      backface-visibility: hidden;
-      overflow: hidden;
-      box-shadow: 0 18px 80px #000e;
-    }
+    .face { position:absolute; inset:0; backface-visibility:hidden; overflow:hidden; box-shadow:0 18px 80px #000e; }
+    .front { background:linear-gradient(135deg,#3a005c,#9000d0); display:flex; align-items:center; justify-content:center; font-size:14vw; font-weight:bold; color:#fff; text-shadow:0 0 40px #fff9; }
+    .back { transform:rotateY(180deg); background:#000; overflow:visible; }
+    .back img { width:100%; height:100%; object-fit:cover; }
 
-    .front {
-      background: linear-gradient(135deg, #3a005c, #9000d0);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14vw;
-      font-weight: bold;
-      color: #ffffff;
-      text-shadow: 0 0 40px #fff9;
-    }
+    .bubble { position:absolute; top:12%; left:10%; right:10%; background:rgba(255,255,255,.97); color:#120024; padding:20px 24px; border-radius:20px; font-size:5vw; line-height:1.45; box-shadow:0 8px 30px #000c; pointer-events:none; }
 
-    .back {
-      transform: rotateY(180deg);
-      background: #000;
-      overflow: visible; /* важно для видимости фото */
-    }
+    #final-heart-container { position:relative; width:86vw; max-width:420px; height:86vw; max-height:420px; margin-top:6vh; }
+    #final-heart { width:100%; height:100%; border-radius:50%; object-fit:cover; box-shadow:0 0 100px #d500ffcc,0 0 200px #d500ff77; opacity:0; transform:scale(0); transition:all 2.8s; animation:pulse-glow 3s infinite alternate; }
+    @keyframes pulse-glow { 0%{box-shadow:0 0 100px #d500ff88,0 0 200px #d500ff44} 100%{box-shadow:0 0 140px #d500ffff,0 0 280px #d500ffaa} }
 
-    .back img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
-    }
+    #congrats-text { position:absolute; top:-8vh; left:0; right:0; font-size:8vw; font-weight:bold; color:#d500ff; text-shadow:0 0 30px #d500ff,0 0 60px #d500ff88; white-space:nowrap; animation:marquee 12s linear infinite; opacity:0; transition:opacity 1s; }
+    #congrats-text.visible { opacity:1; }
+    @keyframes marquee { 0%{transform:translateX(120vw)} 100%{transform:translateX(-120vw)} }
 
-    .bubble {
-      position: absolute;
-      top: 12%;
-      left: 10%;
-      right: 10%;
-      background: rgba(255,255,255,0.97);
-      color: #120024;
-      padding: 20px 24px;
-      border-radius: 20px;
-      font-size: 5vw;
-      line-height: 1.45;
-      box-shadow: 0 8px 30px #000c;
-      pointer-events: none;
-    }
-
-    #final-heart-container {
-      position: relative;
-      width: 86vw;
-      max-width: 420px;
-      height: 86vw;
-      max-height: 420px;
-      margin-top: 6vh;
-    }
-
-    #final-heart {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 0 100px #d500ffcc, 0 0 200px #d500ff77;
-      opacity: 0;
-      transform: scale(0);
-      transition: all 2.8s ease-out;
-      animation: pulse-glow 3s infinite alternate;
-    }
-
-    @keyframes pulse-glow {
-      0%   { box-shadow: 0 0 100px #d500ff88, 0 0 200px #d500ff44; }
-      100% { box-shadow: 0 0 140px #d500ffff, 0 0 280px #d500ffaa; }
-    }
-
-    #congrats-text {
-      position: absolute;
-      top: -8vh;
-      left: 0;
-      right: 0;
-      font-size: 8vw;
-      font-weight: bold;
-      color: #d500ff;
-      text-shadow: 0 0 30px #d500ff, 0 0 60px #d500ff88;
-      white-space: nowrap;
-      animation: marquee 12s linear infinite;
-      opacity: 0;
-      transition: opacity 1s;
-    }
-
-    #congrats-text.visible { opacity: 1; }
-
-    @keyframes marquee {
-      0%   { transform: translateX(120vw); }
-      100% { transform: translateX(-120vw); }
-    }
-
-    .buttons {
-      position: fixed;
-      bottom: 5vh;
-      left: 5vw;
-      right: 5vw;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      z-index: 10;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.6s;
-    }
-
-    .buttons.visible {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .btn {
-      padding: 12px 28px;
-      font-size: 4.5vw;
-      min-width: 120px;
-      max-width: 45%;
-      font-weight: bold;
-      background: #d500ff;
-      color: #000;
-      border: none;
-      border-radius: 16px;
-      box-shadow: 0 6px 20px #d500ff66;
-      cursor: pointer;
-      touch-action: manipulation;
-    }
-
-    .btn:active { transform: scale(0.95); }
+    .buttons { position:fixed; bottom:5vh; left:5vw; right:5vw; display:flex; justify-content:center; gap:20px; flex-wrap:wrap; z-index:10; opacity:0; pointer-events:none; transition:opacity .6s; }
+    .buttons.visible { opacity:1; pointer-events:all; }
+    .btn { padding:12px 28px; font-size:4.5vw; min-width:110px; max-width:45%; font-weight:bold; background:#d500ff; color:#000; border:none; border-radius:16px; box-shadow:0 6px 20px #d500ff66; cursor:pointer; }
+    .btn:active { transform:scale(.95); }
   </style>
 </head>
 <body>
 
-  <div id="rain-bg"></div>
+<div id="rain-bg"></div>
 
-  <section id="count-section" class="active">
-    <div id="count">3</div>
-  </section>
+<section id="count-section" class="active"><div id="count">3</div></section>
 
-  <section id="words-section">
-    <div class="phrase" id="w1">С</div>
-    <div class="phrase" id="w2">Праздником</div>
-    <div class="phrase" id="w3">Родная</div>
-    <div class="phrase" id="w4"><span class="big-heart">❤️</span></div>
-    <img id="gif2" src="gif2.gif" alt="поздравление">
-  </section>
+<section id="words-section">
+  <div class="phrase" id="w1">С</div>
+  <div class="phrase" id="w2">Праздником</div>
+  <div class="phrase" id="w3">Родная</div>
+  <div class="phrase" id="w4"><span class="big-heart">❤️</span></div>
+  <img id="gif2" src="gif2.gif" alt="поздравление">
+</section>
 
-  <section id="card-section">
-    <div id="card-container">
-      <div id="card">
-        <div class="face front">Открытка</div>
-        <div class="face back">
-          <img id="card-photo" src="photo1.jpg" alt="фото">
-          <div class="bubble">Люблю тебя безумно! 💜</div>
-        </div>
+<section id="card-section">
+  <div id="card-container">
+    <div id="card">
+      <div class="face front">Открытка</div>
+      <div class="face back">
+        <img id="card-photo" src="photo1.jpg" alt="фото">
+        <div class="bubble">Люблю тебя безумно! 💜</div>
       </div>
     </div>
+  </div>
 
-    <div id="final-heart-container">
-      <img id="final-heart" src="photo-heart.jpg" alt="сердце">
-      <div id="congrats-text">С праздником!!!</div>
-    </div>
+  <div id="final-heart-container">
+    <img id="final-heart" src="photo-heart.jpg" alt="сердце">
+    <div id="congrats-text">С праздником!!!</div>
+  </div>
 
-    <div class="buttons" id="card-buttons">
-      <button class="btn" id="btn-open">Открыть</button>
-      <button class="btn" id="btn-next" style="opacity:0; pointer-events:none;">Следующее фото</button>
-      <button class="btn" id="btn-heart" style="opacity:0; pointer-events:none;">Сердечко</button>
-    </div>
-  </section>
+  <div class="buttons" id="card-buttons">
+    <button class="btn" id="btn-open">Открыть</button>
+    <button class="btn" id="btn-next" style="opacity:0;pointer-events:none;">След. фото</button>
+    <button class="btn" id="btn-heart" style="opacity:0;pointer-events:none;">Сердечко</button>
+  </div>
+</section>
 
 <script>
-// Дождь (как раньше)
-function startRain() {
-  const rain = document.getElementById('rain-bg');
-  rain.innerHTML = '';
-
-  const chars = 'СПРАЗДНИКОМ!!!❤️💜ЛЮБЛЮТЕБЯРОДНАЯСЧАСТЬЯ!!!   ';
-
-  const cols = Math.floor(window.innerWidth / 13) + 22;
-
-  for (let i = 0; i < cols; i++) {
-    const col = document.createElement('div');
-    col.className = 'rain-col';
-    col.style.left = `${i * 2.4}vw`;
-    col.style.animationDuration = `${5 + Math.random() * 25}s`;
-    col.style.animationDelay = `-${Math.random() * 22}s`;
-
-    let content = '';
-    const len = 50 + Math.floor(Math.random() * 80);
-
-    for (let j = 0; j < len; j++) {
-      const ch = chars[Math.floor(Math.random() * chars.length)];
-      if (j === 0) content += `<span class="lead">${ch}</span>`;
-      else if (j < 12) content += `<span>${ch}</span>`;
-      else content += `<span class="fade">${ch}</span>`;
-    }
-
-    if (Math.random() < 0.7) {
-      const ph = ['С П Р А З Д Н И К О М ! ! !', 'С ПРАЗДНИКОМ!!! ❤️', 'Л Ю Б Л Ю   Т Е Б Я', 'С Д Н Ё М   Р О Ж Д Е Н И Я !!!'][Math.floor(Math.random()*4)];
-      const pos = Math.floor(Math.random() * (len - 15));
-      content = content.substring(0, pos*12) + ph + content.substring((pos + ph.length)*12);
-    }
-
-    col.innerHTML = content;
-    rain.appendChild(col);
-  }
-
-  setTimeout(startRain, 10000 + Math.random() * 15000);
-}
-
-startRain();
+// Дождь
+function startRain(){const rain=document.getElementById('rain-bg');rain.innerHTML='';const chars='СПРАЗДНИКОМ!!!❤️💜ЛЮБЛЮТЕБЯРОДНАЯСЧАСТЬЯ!!!   ';const cols=Math.floor(window.innerWidth/13)+22;for(let i=0;i<cols;i++){const col=document.createElement('div');col.className='rain-col';col.style.left=`${i*2.4}vw`;col.style.animationDuration=`${5+Math.random()*25}s`;col.style.animationDelay=`-${Math.random()*22}s`;let content='';const len=50+Math.floor(Math.random()*80);for(let j=0;j<len;j++){const ch=chars[Math.floor(Math.random()*chars.length)];if(j===0)content+=`<span class="lead">${ch}</span>`;else if(j<12)content+=`<span>${ch}</span>`;else content+=`<span class="fade">${ch}</span>`;}if(Math.random()<0.7){const ph=['С П Р А З Д Н И К О М ! ! !','С ПРАЗДНИКОМ!!! ❤️','Л Ю Б Л Ю   Т Е Б Я','С Д Н Ё М   Р О Ж Д Е Н И Я !!!'][Math.floor(Math.random()*4)];const pos=Math.floor(Math.random()*(len-15));content=content.substring(0,pos*12)+ph+content.substring((pos+ph.length)*12);}col.innerHTML=content;rain.appendChild(col);}setTimeout(startRain,10000+Math.random()*15000);}startRain();
 
 // Сцены
-const sections = [
-  document.getElementById('count-section'),
-  document.getElementById('words-section'),
-  document.getElementById('card-section')
-];
+const sections=[document.getElementById('count-section'),document.getElementById('words-section'),document.getElementById('card-section')];let cur=0;function show(idx){sections.forEach(s=>s.classList.remove('active'));sections[idx].classList.add('active');cur=idx;}
 
-let cur = 0;
+// Отсчёт и слова
+function countdown(){const el=document.getElementById('count');let n=3;el.textContent=n;const t=setInterval(()=>{n--;el.textContent=n;if(n<=0){clearInterval(t);setTimeout(()=>{show(1);showWords();},1600);}},1700);}
+function showWords(){const ws=[document.getElementById('w1'),document.getElementById('w2'),document.getElementById('w3'),document.getElementById('w4')];let i=0;const iv=setInterval(()=>{if(i>0)ws[i-1].classList.remove('visible');if(i<ws.length){ws[i].classList.add('visible');i++;}else{clearInterval(iv);setTimeout(()=>{document.getElementById('gif2').style.opacity='1';},2400);setTimeout(()=>show(2),6800);}},2800);}
 
-function show(idx) {
-  sections.forEach(s => s.classList.remove('active'));
-  sections[idx].classList.add('active');
-  cur = idx;
-}
-
-// Отсчёт и слова (как раньше)
-function countdown() {
-  const el = document.getElementById('count');
-  let n = 3;
-  el.textContent = n;
-
-  const t = setInterval(() => {
-    n--;
-    el.textContent = n;
-    if (n <= 0) {
-      clearInterval(t);
-      setTimeout(() => {
-        show(1);
-        showWords();
-      }, 1600);
-    }
-  }, 1700);
-}
-
-function showWords() {
-  const ws = [
-    document.getElementById('w1'),
-    document.getElementById('w2'),
-    document.getElementById('w3'),
-    document.getElementById('w4')
-  ];
-
-  let i = 0;
-  const iv = setInterval(() => {
-    if (i > 0) ws[i-1].classList.remove('visible');
-    if (i < ws.length) {
-      ws[i].classList.add('visible');
-      i++;
-    } else {
-      clearInterval(iv);
-      setTimeout(() => {
-        document.getElementById('gif2').style.opacity = '1';
-      }, 2400);
-      setTimeout(() => show(2), 6800);
-    }
-  }, 2800);
-}
-
-// Фото в открытке
-const photos = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg']; // замени на свои
-let photoIndex = 0;
-
-const cardPhoto = document.getElementById('card-photo');
-const btnNext = document.getElementById('btn-next');
-
-btnNext.addEventListener('click', () => {
-  photoIndex = (photoIndex + 1) % photos.length;
-  cardPhoto.src = photos[photoIndex];
-});
+// Фото
+const photos=['photo1.jpg','photo2.jpg','photo3.jpg'];let photoIndex=0;const cardPhoto=document.getElementById('card-photo');document.getElementById('btn-next').addEventListener('click',()=>{photoIndex=(photoIndex+1)%photos.length;cardPhoto.src=photos[photoIndex];});
 
 // Кнопки
-const btnOpen = document.getElementById('btn-open');
-const btnHeart = document.getElementById('btn-heart');
-const cardButtons = document.getElementById('card-buttons');
-const card = document.getElementById('card');
+const btnOpen=document.getElementById('btn-open');const btnHeart=document.getElementById('btn-heart');const cardButtons=document.getElementById('card-buttons');const card=document.getElementById('card');
+btnOpen.addEventListener('click',()=>{card.classList.add('flipped');card.style.transform='rotateY(180deg)';btnOpen.style.display='none';document.getElementById('btn-next').style.opacity='1';document.getElementById('btn-next').style.pointerEvents='all';btnHeart.style.opacity='1';btnHeart.style.pointerEvents='all';});
+btnHeart.addEventListener('click',()=>{card.classList.remove('flipped');card.style.transform='rotateY(0deg)';setTimeout(()=>{document.getElementById('final-heart').classList.add('visible');document.getElementById('congrats-text').classList.add('visible');cardButtons.classList.remove('visible');},800);});
 
-btnOpen.addEventListener('click', () => {
-  card.classList.add('flipped');
-  card.style.transform = 'rotateY(180deg)';
-  btnOpen.style.display = 'none';
-  btnNext.style.opacity = '1';
-  btnNext.style.pointerEvents = 'all';
-  btnHeart.style.opacity = '1';
-  btnHeart.style.pointerEvents = 'all';
-});
-
-btnHeart.addEventListener('click', () => {
-  card.classList.remove('flipped');
-  card.style.transform = 'rotateY(0deg)';
-  setTimeout(() => {
-    document.getElementById('final-heart').classList.add('visible');
-    document.getElementById('congrats-text').classList.add('visible');
-    cardButtons.classList.remove('visible');
-  }, 800);
-});
-
-// Показ кнопок
-function showCardButtons() {
-  if (cur === 2) {
-    cardButtons.classList.add('visible');
-  }
-}
-
-const originalShow = show;
-show = function(idx) {
-  originalShow(idx);
-  if (idx === 2) setTimeout(showCardButtons, 500);
-};
+function showCardButtons(){if(cur===2)cardButtons.classList.add('visible');}
+const originalShow=show;show=function(idx){originalShow(idx);if(idx===2)setTimeout(showCardButtons,500);};
 
 // Запуск
-function checkAndStart() {
-  if (window.innerWidth > window.innerHeight) {
-    countdown();
-  }
-}
-
-checkAndStart();
-window.addEventListener('orientationchange', () => setTimeout(checkAndStart, 300));
-window.addEventListener('resize', () => setTimeout(checkAndStart, 300));
+function checkAndStart(){if(window.innerWidth>window.innerHeight)countdown();}
+checkAndStart();window.addEventListener('orientationchange',()=>setTimeout(checkAndStart,300));window.addEventListener('resize',()=>setTimeout(checkAndStart,300));
 </script>
 </body>
 </html>

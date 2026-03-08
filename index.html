@@ -50,7 +50,7 @@
       flex-direction:column;
       align-items:center;
       justify-content:flex-start;
-      padding-top:18vh;
+      padding-top:12vh;
       opacity:0;
       pointer-events:none;
       transition:opacity 0.9s ease;
@@ -65,13 +65,13 @@
       color:#d500ff;
       text-shadow:0 0 80px #d500ff, 0 0 160px #d500ffaa;
       letter-spacing:-14px;
-      margin-top:10vh;
+      margin-top:8vh;
     }
 
     .phrase {
       font-size: clamp(9vw, 13vw, 80px);
       font-weight:bold;
-      margin:18px 0;
+      margin:16px 0;
       opacity:0;
       transform:scale(0.3);
       transition:all 1.6s ease-out;
@@ -84,15 +84,21 @@
 
     @keyframes beat { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
 
-    #gif2 { max-width:82vw; margin-top:10vh; opacity:0; transition:opacity 1.6s; }
+    #gif2 {
+      max-width:82vw;
+      margin-top:4vh;          /* подняли гифку выше */
+      margin-bottom:8vh;
+      opacity:0;
+      transition:opacity 1.6s;
+    }
 
     #card-container {
       width:95vw;
       max-width:440px;
-      height:76vh;
-      max-height:580px;
+      height:60vh;             /* уменьшили высоту, чтобы кнопки помещались */
+      max-height:520px;
       perspective:1700px;
-      margin-top:8vh;
+      margin-top:6vh;
     }
 
     #card {
@@ -148,12 +154,44 @@
       opacity:0;
       transform:scale(0);
       transition:all 2.8s ease-out;
-      margin-top:8vh;
+      margin-top:6vh;
     }
 
     #final-heart.visible { opacity:1; transform:scale(1); }
 
-    #touch-zone { position:fixed; inset:0; z-index:999; touch-action:manipulation; }
+    /* Кнопки под открыткой */
+    .buttons {
+      position:fixed;
+      bottom:6vh;
+      left:0; right:0;
+      display:flex;
+      justify-content:center;
+      gap:30px;
+      z-index:10;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity 0.6s;
+    }
+
+    .buttons.visible {
+      opacity:1;
+      pointer-events:all;
+    }
+
+    .btn {
+      padding:14px 32px;
+      font-size:5vw;
+      font-weight:bold;
+      background:#d500ff;
+      color:#000;
+      border:none;
+      border-radius:16px;
+      box-shadow:0 6px 20px #d500ff66;
+      cursor:pointer;
+      touch-action:manipulation;
+    }
+
+    .btn:active { transform:scale(0.95); }
   </style>
 </head>
 <body>
@@ -183,9 +221,13 @@
       </div>
     </div>
     <img id="final-heart" src="photo-heart.jpg" alt="сердце">
-  </section>
 
-  <div id="touch-zone"></div>
+    <!-- Кнопки -->
+    <div class="buttons" id="card-buttons">
+      <button class="btn" id="btn-open">Открыть</button>
+      <button class="btn" id="btn-heart" style="opacity:0.4; pointer-events:none;">Сердечко</button>
+    </div>
+  </section>
 
 <script>
 // Дождь
@@ -288,24 +330,35 @@ function showWords() {
   }, 2800);
 }
 
-// Открытка — клики
+// Кнопки открытки
+const btnOpen = document.getElementById('btn-open');
+const btnHeart = document.getElementById('btn-heart');
+const cardButtons = document.getElementById('card-buttons');
 const card = document.getElementById('card');
-let cardState = 0; // 0=закрыта, 1=открыта, 2=сердце
 
-card.addEventListener('click', () => {
-  if (cardState === 0) {
-    card.classList.add('flipped');
-    card.style.transform = 'rotateY(180deg)';
-    cardState = 1;
-  } else if (cardState === 1) {
-    card.classList.remove('flipped');
-    card.style.transform = 'rotateY(0deg)';
-    setTimeout(() => {
-      document.getElementById('final-heart').classList.add('visible');
-      cardState = 2;
-    }, 800);
-  }
+btnOpen.addEventListener('click', () => {
+  card.classList.add('flipped');
+  card.style.transform = 'rotateY(180deg)';
+  btnOpen.style.display = 'none';
+  btnHeart.style.opacity = '1';
+  btnHeart.style.pointerEvents = 'all';
 });
+
+btnHeart.addEventListener('click', () => {
+  card.classList.remove('flipped');
+  card.style.transform = 'rotateY(0deg)';
+  setTimeout(() => {
+    document.getElementById('final-heart').classList.add('visible');
+    cardButtons.classList.remove('visible');
+  }, 800);
+});
+
+// Показ кнопок когда открытка на экране
+function showCardButtons() {
+  if (cur === 2) {
+    cardButtons.classList.add('visible');
+  }
+}
 
 // Запуск
 function checkAndStart() {
@@ -317,6 +370,15 @@ function checkAndStart() {
 checkAndStart();
 window.addEventListener('orientationchange', () => setTimeout(checkAndStart, 300));
 window.addEventListener('resize', () => setTimeout(checkAndStart, 300));
+
+// Когда переходим на открытку — показываем кнопки
+const originalShow = show;
+show = function(idx) {
+  originalShow(idx);
+  if (idx === 2) {
+    setTimeout(showCardButtons, 500);
+  }
+};
 </script>
 </body>
 </html>

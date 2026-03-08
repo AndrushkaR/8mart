@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>С праздником, родная! 💜</title>
 
-  <!-- Preload ВСЕХ изображений -->
+  <!-- Preload всех изображений и новой гифки -->
   <link rel="preload" as="image" href="gif2.gif">
+  <link rel="preload" as="image" href="gif-final.gif"> <!-- ← новая гифка в конце -->
   <link rel="preload" as="image" href="photo1.jpg">
   <link rel="preload" as="image" href="photo2.jpg">
   <link rel="preload" as="image" href="photo3.jpg">
@@ -86,6 +87,19 @@
       margin-bottom:8vh;
       opacity:0;
       transition:opacity 1.6s;
+      position:absolute;
+      bottom:10vh;
+      z-index:2;
+    }
+    #gif-final {
+      max-width:82vw;
+      margin-top:4vh;
+      margin-bottom:8vh;
+      opacity:0;
+      transition:opacity 1.6s;
+      position:absolute;
+      bottom:10vh;
+      z-index:2;
     }
     /* Слайдер вместо открытки */
     #photos-section {
@@ -167,13 +181,13 @@
     }
     #congrats-text {
       position:absolute;
-      bottom:-12vh; /* ← припустил ниже, чтобы не вылезал за рамку */
+      bottom:-12vh;
       left:0; right:0;
-      font-size: clamp(5vw, 7vw, 48px); /* уменьшил размер для мобильных */
+      font-size: clamp(5vw, 7vw, 48px);
       font-weight:bold;
       color:#d500ff;
       text-shadow:0 0 30px #d500ff, 0 0 60px #d500ff88;
-      white-space: pre-wrap; /* ← позволяет перенос строки */
+      white-space: pre-wrap;
       text-align:center;
       line-height:1.2;
       padding:0 10vw;
@@ -269,6 +283,7 @@
 
   <div id="final-heart-container">
     <img id="final-heart" src="photo-heart.jpg" alt="сердце">
+    <img id="gif-final" src="gif-final.gif" alt="финальная гифка">
     <div id="congrats-text">С праздником!!! 💜</div>
   </div>
 
@@ -397,7 +412,6 @@ function nextSlide() {
   currentSlide = (currentSlide + 1) % slides.length;
   goToSlide(currentSlide);
   
-  // Показываем кнопку «Сердечко» на последнем фото
   if (currentSlide === slides.length - 1) {
     document.getElementById('card-buttons').classList.add('visible');
   }
@@ -412,17 +426,20 @@ function startPhotoSlider() {
   }, 800);
 }
 
-// Сердечко — после нажатия гифка исчезает
+// Сердечко — заменяем гифку на новую
 const btnHeart = document.getElementById('btn-heart');
 btnHeart.addEventListener('click', () => {
   clearInterval(slideInterval);
   document.getElementById('photos-section').style.opacity = '0';
-  // Гифка исчезает (если она ещё видна)
+  
+  // Старая гифка исчезает
   document.getElementById('gif2').style.opacity = '0';
+  
   setTimeout(() => {
     document.getElementById('photos-section').style.display = 'none';
     document.getElementById('final-heart-container').classList.add('visible');
     document.getElementById('congrats-text').classList.add('visible');
+    document.getElementById('gif-final').style.opacity = '1'; // ← новая гифка появляется
     document.getElementById('card-buttons').classList.remove('visible');
   }, 800);
 });

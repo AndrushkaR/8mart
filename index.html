@@ -4,93 +4,92 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>С праздником, родная! 💜</title>
-
-  <!-- Preload ресурсов -->
-  <link rel="preload" as="image" href="gif2.gif">
-  <link rel="preload" as="image" href="photo1.jpg">
-  <link rel="preload" as="image" href="photo2.jpg">
-  <link rel="preload" as="image" href="photo3.jpg">
-  <link rel="preload" as="image" href="photo-heart.jpg">
-
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    html, body {
-      height: 100dvh;
-      font-family: system-ui, sans-serif;
-      background: #000;
-      color: #fff;
-      overflow: hidden;
-      touch-action: manipulation;
+    body, html {
+      height:100%;
+      font-family:system-ui, sans-serif;
+      background:#000;
+      color:#fff;
+      overflow:hidden;
+      touch-action:manipulation;
     }
+
     #rain-bg {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-      overflow: hidden;
+      position:fixed;
+      inset:0;
+      overflow:hidden;
+      z-index:-1;
+      pointer-events:none;
     }
+
     .rain-col {
-      position: absolute;
-      top: -220vh;
-      font-family: 'Courier New', monospace;
-      font-size: 1.35rem;
-      line-height: 1;
-      color: #c300ff;
-      text-shadow: 0 0 15px #c300ffcc, 0 0 30px #c300ff88;
-      white-space: pre;
-      animation: fall linear infinite;
-      will-change: transform;
+      position:absolute;
+      top:-220vh;
+      font-family:'Courier New', monospace;
+      font-size:1.35rem;
+      line-height:1.0;
+      color:#c300ff;
+      text-shadow:0 0 15px #c300ffcc, 0 0 30px #c300ff88;
+      white-space:pre;
+      animation:fall linear infinite;
     }
+
     .lead { color:#ffffff; text-shadow:0 0 25px #fff, 0 0 50px #c300ff; font-weight:bold; }
-    .fade { opacity:0.48; }
+    .fade  { opacity:0.48; }
 
     @keyframes fall {
-      to { transform: translateY(240vh); }
+      0%   { transform:translateY(-220%); }
+      100% { transform:translateY(240vh); }
     }
 
     section {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding-top: 12vh;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.9s ease;
-      z-index: 2;
+      position:fixed;
+      inset:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      padding-top:12vh;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity 0.9s ease;
+      z-index:2;
     }
-    section.active { opacity: 1; pointer-events: all; }
+
+    section.active { opacity:1; pointer-events:all; }
 
     #count {
-      font-size: 38vw;
-      font-weight: 900;
-      color: #d500ff;
-      text-shadow: 0 0 80px #d500ff, 0 0 160px #d500ffaa;
-      letter-spacing: -14px;
-      margin-top: 8vh;
+      font-size:38vw;
+      font-weight:900;
+      color:#d500ff;
+      text-shadow:0 0 80px #d500ff, 0 0 160px #d500ffaa;
+      letter-spacing:-14px;
+      margin-top:8vh;
     }
 
     .phrase {
       font-size: clamp(9vw, 13vw, 80px);
-      font-weight: bold;
-      margin: 16px 0;
-      opacity: 0;
-      transform: scale(0.3);
-      transition: all 1.6s ease-out;
-      text-shadow: 0 0 45px currentColor;
+      font-weight:bold;
+      margin:16px 0;
+      opacity:0;
+      transform:scale(0.3);
+      transition:all 1.6s ease-out;
+      text-shadow:0 0 45px currentColor;
     }
-    .phrase.visible { opacity: 1; transform: scale(1); }
 
-    .big-heart { font-size: clamp(18vw, 24vw, 140px); color: #d500ff; animation: beat 1.8s infinite; }
-    @keyframes beat { 0%,100% { transform: scale(1) } 50% { transform: scale(1.25) } }
+    .phrase.visible { opacity:1; transform:scale(1); }
+
+    .big-heart { font-size: clamp(18vw, 24vw, 140px); color:#d500ff; animation:beat 1.8s infinite; }
+
+    @keyframes beat { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
 
     #gif2 {
-      max-width: 82vw;
-      margin: 4vh 0 8vh;
-      opacity: 0;
-      transition: opacity 1.6s;
+      max-width:82vw;
+      margin-top:4vh;
+      margin-bottom:8vh;
+      opacity:0;
+      transition:opacity 1.6s;
     }
 
     #card-container {
@@ -98,9 +97,10 @@
       max-width: 380px;
       height: 58vh;
       max-height: 500px;
-      perspective: clamp(800px, 1700px, 3000px);
+      perspective: 1700px;
       margin-top: 6vh;
     }
+
     #card {
       width: 100%;
       height: 100%;
@@ -109,7 +109,6 @@
       transition: transform 1.9s cubic-bezier(0.68, -0.6, 0.265, 1.6);
       clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
     }
-    #card.flipped { transform: rotateY(180deg); }
 
     .face {
       position: absolute;
@@ -118,6 +117,7 @@
       overflow: hidden;
       box-shadow: 0 18px 80px #000e;
     }
+
     .front {
       background: linear-gradient(135deg, #3a005c, #9000d0);
       display: flex;
@@ -127,37 +127,19 @@
       font-weight: bold;
       color: #ffffff;
       text-shadow: 0 0 40px #fff9;
-      z-index: 2;
     }
+
     .back {
       transform: rotateY(180deg);
       background: #000;
-      z-index: 1;
+      overflow: visible; /* важно для видимости фото */
     }
+
     .back img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      /* Если фото всё равно не видно — закомментируй следующую строку: */
-      /* clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%); */
-    }
-
-    /* ─── Фикс видимости фото после открытия ─── */
-    #card.flipped .front {
-      opacity: 0 !important;
-      visibility: hidden !important;
-      pointer-events: none !important;
-    }
-
-    #card .back,
-    #card.flipped .back {
-      opacity: 1 !important;
-      visibility: visible !important;
-    }
-
-    #card-photo {
-      opacity: 1 !important;
-      display: block !important;
+      clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
     }
 
     .bubble {
@@ -173,7 +155,6 @@
       line-height: 1.45;
       box-shadow: 0 8px 30px #000c;
       pointer-events: none;
-      z-index: 3;
     }
 
     #final-heart-container {
@@ -184,6 +165,7 @@
       max-height: 420px;
       margin-top: 6vh;
     }
+
     #final-heart {
       width: 100%;
       height: 100%;
@@ -195,6 +177,7 @@
       transition: all 2.8s ease-out;
       animation: pulse-glow 3s infinite alternate;
     }
+
     @keyframes pulse-glow {
       0%   { box-shadow: 0 0 100px #d500ff88, 0 0 200px #d500ff44; }
       100% { box-shadow: 0 0 140px #d500ffff, 0 0 280px #d500ffaa; }
@@ -203,7 +186,8 @@
     #congrats-text {
       position: absolute;
       top: -8vh;
-      left: 0; right: 0;
+      left: 0;
+      right: 0;
       font-size: 8vw;
       font-weight: bold;
       color: #d500ff;
@@ -213,7 +197,9 @@
       opacity: 0;
       transition: opacity 1s;
     }
+
     #congrats-text.visible { opacity: 1; }
+
     @keyframes marquee {
       0%   { transform: translateX(120vw); }
       100% { transform: translateX(-120vw); }
@@ -222,7 +208,8 @@
     .buttons {
       position: fixed;
       bottom: 5vh;
-      left: 5vw; right: 5vw;
+      left: 5vw;
+      right: 5vw;
       display: flex;
       justify-content: center;
       gap: 20px;
@@ -232,10 +219,12 @@
       pointer-events: none;
       transition: opacity 0.6s;
     }
+
     .buttons.visible {
       opacity: 1;
       pointer-events: all;
     }
+
     .btn {
       padding: 12px 28px;
       font-size: 4.5vw;
@@ -250,11 +239,8 @@
       cursor: pointer;
       touch-action: manipulation;
     }
+
     .btn:active { transform: scale(0.95); }
-    .btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
   </style>
 </head>
 <body>
@@ -291,127 +277,172 @@
 
     <div class="buttons" id="card-buttons">
       <button class="btn" id="btn-open">Открыть</button>
-      <button class="btn" id="btn-next" disabled>Следующее фото</button>
-      <button class="btn" id="btn-heart" disabled>Сердечко</button>
+      <button class="btn" id="btn-next" style="opacity:0; pointer-events:none;">Следующее фото</button>
+      <button class="btn" id="btn-heart" style="opacity:0; pointer-events:none;">Сердечко</button>
     </div>
   </section>
 
 <script>
-const photos = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg'];
-let photoIndex = 0;
-
-function initRain() {
+// Дождь (как раньше)
+function startRain() {
   const rain = document.getElementById('rain-bg');
   rain.innerHTML = '';
-  const chars = 'СПРАЗДНИКОМ!!!❤️💜ЛЮБЛЮТЕБЯРОДНАЯСЧАСТЬЯ!!! ';
-  const colCount = Math.floor(window.innerWidth / 13) + 22;
 
-  for (let i = 0; i < colCount; i++) {
+  const chars = 'СПРАЗДНИКОМ!!!❤️💜ЛЮБЛЮТЕБЯРОДНАЯСЧАСТЬЯ!!!   ';
+
+  const cols = Math.floor(window.innerWidth / 13) + 22;
+
+  for (let i = 0; i < cols; i++) {
     const col = document.createElement('div');
     col.className = 'rain-col';
     col.style.left = `${i * 2.4}vw`;
     col.style.animationDuration = `${5 + Math.random() * 25}s`;
     col.style.animationDelay = `-${Math.random() * 22}s`;
 
-    let text = '';
+    let content = '';
     const len = 50 + Math.floor(Math.random() * 80);
+
     for (let j = 0; j < len; j++) {
       const ch = chars[Math.floor(Math.random() * chars.length)];
-      if (j === 0) text += `<span class="lead">${ch}</span>`;
-      else if (j < 12) text += `<span>${ch}</span>`;
-      else text += `<span class="fade">${ch}</span>`;
+      if (j === 0) content += `<span class="lead">${ch}</span>`;
+      else if (j < 12) content += `<span>${ch}</span>`;
+      else content += `<span class="fade">${ch}</span>`;
     }
 
     if (Math.random() < 0.7) {
-      const phrases = ['С П Р А З Д Н И К О М ! ! !', 'С ПРАЗДНИКОМ!!! ❤️', 'Л Ю Б Л Ю Т Е Б Я', 'С Д Н Ё М Р О Ж Д Е Н И Я !!!'];
-      const ph = phrases[Math.floor(Math.random() * phrases.length)];
+      const ph = ['С П Р А З Д Н И К О М ! ! !', 'С ПРАЗДНИКОМ!!! ❤️', 'Л Ю Б Л Ю   Т Е Б Я', 'С Д Н Ё М   Р О Ж Д Е Н И Я !!!'][Math.floor(Math.random()*4)];
       const pos = Math.floor(Math.random() * (len - 15));
-      text = text.slice(0, pos) + ph + text.slice(pos + ph.length);
+      content = content.substring(0, pos*12) + ph + content.substring((pos + ph.length)*12);
     }
 
-    col.innerHTML = text;
+    col.innerHTML = content;
     rain.appendChild(col);
   }
+
+  setTimeout(startRain, 10000 + Math.random() * 15000);
 }
 
+startRain();
+
+// Сцены
 const sections = [
   document.getElementById('count-section'),
   document.getElementById('words-section'),
   document.getElementById('card-section')
 ];
 
-function showSection(idx) {
-  sections.forEach((s, i) => s.classList.toggle('active', i === idx));
-  if (idx === 2) {
-    setTimeout(() => document.getElementById('card-buttons').classList.add('visible'), 600);
-  }
+let cur = 0;
+
+function show(idx) {
+  sections.forEach(s => s.classList.remove('active'));
+  sections[idx].classList.add('active');
+  cur = idx;
 }
 
-async function showWords() {
-  const words = [document.getElementById('w1'), document.getElementById('w2'), document.getElementById('w3'), document.getElementById('w4')];
-  for (const el of words) {
-    el.classList.add('visible');
-    await new Promise(r => setTimeout(r, 2600));
-    if (el !== words.at(-1)) el.classList.remove('visible');
-  }
-  document.getElementById('gif2').style.opacity = '1';
-  await new Promise(r => setTimeout(r, 4200));
-  showSection(2);
-}
-
+// Отсчёт и слова (как раньше)
 function countdown() {
   const el = document.getElementById('count');
   let n = 3;
   el.textContent = n;
-  const interval = setInterval(() => {
+
+  const t = setInterval(() => {
     n--;
     el.textContent = n;
     if (n <= 0) {
-      clearInterval(interval);
-      setTimeout(() => { showSection(1); showWords(); }, 1400);
+      clearInterval(t);
+      setTimeout(() => {
+        show(1);
+        showWords();
+      }, 1600);
     }
-  }, 1600);
+  }, 1700);
 }
 
-const card = document.getElementById('card');
+function showWords() {
+  const ws = [
+    document.getElementById('w1'),
+    document.getElementById('w2'),
+    document.getElementById('w3'),
+    document.getElementById('w4')
+  ];
+
+  let i = 0;
+  const iv = setInterval(() => {
+    if (i > 0) ws[i-1].classList.remove('visible');
+    if (i < ws.length) {
+      ws[i].classList.add('visible');
+      i++;
+    } else {
+      clearInterval(iv);
+      setTimeout(() => {
+        document.getElementById('gif2').style.opacity = '1';
+      }, 2400);
+      setTimeout(() => show(2), 6800);
+    }
+  }, 2800);
+}
+
+// Фото в открытке
+const photos = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg']; // замени на свои
+let photoIndex = 0;
+
 const cardPhoto = document.getElementById('card-photo');
-const btnOpen  = document.getElementById('btn-open');
-const btnNext  = document.getElementById('btn-next');
-const btnHeart = document.getElementById('btn-heart');
+const btnNext = document.getElementById('btn-next');
 
 btnNext.addEventListener('click', () => {
   photoIndex = (photoIndex + 1) % photos.length;
   cardPhoto.src = photos[photoIndex];
 });
 
+// Кнопки
+const btnOpen = document.getElementById('btn-open');
+const btnHeart = document.getElementById('btn-heart');
+const cardButtons = document.getElementById('card-buttons');
+const card = document.getElementById('card');
+
 btnOpen.addEventListener('click', () => {
   card.classList.add('flipped');
+  card.style.transform = 'rotateY(180deg)';
   btnOpen.style.display = 'none';
-  btnNext.disabled = false;
-  btnHeart.disabled = false;
+  btnNext.style.opacity = '1';
+  btnNext.style.pointerEvents = 'all';
+  btnHeart.style.opacity = '1';
+  btnHeart.style.pointerEvents = 'all';
 });
 
 btnHeart.addEventListener('click', () => {
   card.classList.remove('flipped');
+  card.style.transform = 'rotateY(0deg)';
   setTimeout(() => {
-    document.getElementById('final-heart').style.opacity = '1';
-    document.getElementById('final-heart').style.transform = 'scale(1)';
+    document.getElementById('final-heart').classList.add('visible');
     document.getElementById('congrats-text').classList.add('visible');
-    document.getElementById('card-buttons').classList.remove('visible');
-  }, 900);
+    cardButtons.classList.remove('visible');
+  }, 800);
 });
 
-function startExperience() {
-  initRain();
-  countdown();
+// Показ кнопок
+function showCardButtons() {
+  if (cur === 2) {
+    cardButtons.classList.add('visible');
+  }
 }
 
-window.addEventListener('load', startExperience);
-window.addEventListener('orientationchange', () => setTimeout(startExperience, 400));
-window.addEventListener('resize', () => {
-  clearTimeout(window.resizeTimer);
-  window.resizeTimer = setTimeout(initRain, 300);
-});
+const originalShow = show;
+show = function(idx) {
+  originalShow(idx);
+  if (idx === 2) setTimeout(showCardButtons, 500);
+};
+
+// Запуск
+function checkAndStart() {
+  if (window.innerWidth > window.innerHeight) {
+    countdown();
+  }
+}
+
+checkAndStart();
+window.addEventListener('orientationchange', () => setTimeout(checkAndStart, 300));
+window.addEventListener('resize', () => setTimeout(checkAndStart, 300));
 </script>
 </body>
 </html>

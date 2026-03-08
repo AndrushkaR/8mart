@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>С праздником, родная! 💜</title>
 
-  <!-- Preload ВСЕХ изображений, чтобы точно загрузились -->
+  <!-- Preload ВСЕХ изображений -->
   <link rel="preload" as="image" href="gif2.gif">
   <link rel="preload" as="image" href="photo1.jpg">
   <link rel="preload" as="image" href="photo2.jpg">
@@ -167,13 +167,16 @@
     }
     #congrats-text {
       position:absolute;
-      top:-8vh;
+      bottom:-12vh; /* ← припустил ниже, чтобы не вылезал за рамку */
       left:0; right:0;
-      font-size:8vw;
+      font-size: clamp(5vw, 7vw, 48px); /* уменьшил размер для мобильных */
       font-weight:bold;
       color:#d500ff;
       text-shadow:0 0 30px #d500ff, 0 0 60px #d500ff88;
-      white-space:nowrap;
+      white-space: pre-wrap; /* ← позволяет перенос строки */
+      text-align:center;
+      line-height:1.2;
+      padding:0 10vw;
       animation:marquee 12s linear infinite;
       opacity:0;
       transition:opacity 1.5s;
@@ -266,7 +269,7 @@
 
   <div id="final-heart-container">
     <img id="final-heart" src="photo-heart.jpg" alt="сердце">
-    <div id="congrats-text">С праздником!!!</div>
+    <div id="congrats-text">С праздником!!! 💜</div>
   </div>
 
   <div class="buttons" id="card-buttons">
@@ -409,11 +412,13 @@ function startPhotoSlider() {
   }, 800);
 }
 
-// Сердечко
+// Сердечко — после нажатия гифка исчезает
 const btnHeart = document.getElementById('btn-heart');
 btnHeart.addEventListener('click', () => {
   clearInterval(slideInterval);
   document.getElementById('photos-section').style.opacity = '0';
+  // Гифка исчезает (если она ещё видна)
+  document.getElementById('gif2').style.opacity = '0';
   setTimeout(() => {
     document.getElementById('photos-section').style.display = 'none';
     document.getElementById('final-heart-container').classList.add('visible');

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>С праздником, родная! 💜</title>
 
-  <!-- Preload всех изображений и новой гифки -->
+  <!-- Preload ВСЕХ изображений и новой гифки -->
   <link rel="preload" as="image" href="gif2.gif">
   <link rel="preload" as="image" href="gif-final.gif"> <!-- ← новая гифка в конце -->
   <link rel="preload" as="image" href="photo1.jpg">
@@ -87,19 +87,6 @@
       margin-bottom:8vh;
       opacity:0;
       transition:opacity 1.6s;
-      position:absolute;
-      bottom:10vh;
-      z-index:2;
-    }
-    #gif-final {
-      max-width:82vw;
-      margin-top:4vh;
-      margin-bottom:8vh;
-      opacity:0;
-      transition:opacity 1.6s;
-      position:absolute;
-      bottom:10vh;
-      z-index:2;
     }
     /* Слайдер вместо открытки */
     #photos-section {
@@ -158,47 +145,56 @@
     }
     #final-heart-container {
       position:relative;
-      width:86vw;
-      max-width:420px;
-      height:86vw;
-      max-height:420px;
-      margin-top:6vh;
-      opacity:0;
-      transition:opacity 2s ease;
-    }
-    #final-heart-container.visible { opacity:1; }
-    #final-heart {
       width:100%;
       height:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:3vh; /* расстояние между элементами */
+      opacity:0;
+      transition:opacity 2s ease;
+      padding:4vh 0;
+    }
+    #final-heart-container.visible { opacity:1; }
+    #gif-final {
+      max-width:60vw;
+      max-height:30vh;
+      object-fit:contain;
+      opacity:0;
+      transition:opacity 1.8s ease 0.4s; /* появляется с задержкой */
+    }
+    #final-heart-container.visible #gif-final {
+      opacity:1;
+    }
+    #congrats-text {
+      font-size: clamp(6vw, 9vw, 60px);
+      font-weight:bold;
+      color:#d500ff;
+      text-shadow:0 0 30px #d500ff, 0 0 60px #d500ff88;
+      text-align:center;
+      white-space: pre-wrap;
+      line-height:1.3;
+      opacity:0;
+      transform:translateY(20px);
+      transition:all 1.5s ease 0.8s;
+    }
+    #final-heart-container.visible #congrats-text {
+      opacity:1;
+      transform:translateY(0);
+    }
+    #final-heart {
+      width: clamp(50vw, 70vw, 300px);
+      height: clamp(50vw, 70vw, 300px);
       border-radius:50%;
       object-fit:cover;
       box-shadow:0 0 100px #d500ffcc, 0 0 200px #d500ff77;
       animation:pulse-glow 3s infinite alternate;
+      margin-top:auto; /* прижимает сердце вниз */
     }
     @keyframes pulse-glow {
       0% { box-shadow:0 0 100px #d500ff88, 0 0 200px #d500ff44; }
       100% { box-shadow:0 0 140px #d500ffff, 0 0 280px #d500ffaa; }
-    }
-    #congrats-text {
-      position:absolute;
-      bottom:-12vh;
-      left:0; right:0;
-      font-size: clamp(5vw, 7vw, 48px);
-      font-weight:bold;
-      color:#d500ff;
-      text-shadow:0 0 30px #d500ff, 0 0 60px #d500ff88;
-      white-space: pre-wrap;
-      text-align:center;
-      line-height:1.2;
-      padding:0 10vw;
-      animation:marquee 12s linear infinite;
-      opacity:0;
-      transition:opacity 1.5s;
-    }
-    #congrats-text.visible { opacity:1; }
-    @keyframes marquee {
-      0% { transform:translateX(120vw); }
-      100% { transform:translateX(-120vw); }
     }
     .buttons {
       position:fixed;
@@ -282,9 +278,9 @@
   </div>
 
   <div id="final-heart-container">
-    <img id="final-heart" src="photo-heart.jpg" alt="сердце">
     <img id="gif-final" src="gif-final.gif" alt="финальная гифка">
     <div id="congrats-text">С праздником!!! 💜</div>
+    <img id="final-heart" src="photo-heart.jpg" alt="сердце">
   </div>
 
   <div class="buttons" id="card-buttons">
@@ -439,7 +435,7 @@ btnHeart.addEventListener('click', () => {
     document.getElementById('photos-section').style.display = 'none';
     document.getElementById('final-heart-container').classList.add('visible');
     document.getElementById('congrats-text').classList.add('visible');
-    document.getElementById('gif-final').style.opacity = '1'; // ← новая гифка появляется
+    document.getElementById('gif-final').style.opacity = '1'; // ← новая гифка появляется сверху
     document.getElementById('card-buttons').classList.remove('visible');
   }, 800);
 });

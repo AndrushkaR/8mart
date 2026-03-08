@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>С 8 Марта, родная! 💜</title>
+  <style>
+    :root {
+      --violet: #9d00ff;
+      --bright-violet: #c2185b;
+      --dark-violet: #4b0082;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--dark-violet), var(--violet), #ff69b4);
+      color: white;
+      font-family: system-ui, -apple-system, sans-serif;
+      touch-action: manipulation;
+    }
+
+    /* Экран "переверни телефон" */
+    #rotate-screen {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      transition: opacity 1s;
+    }
+
+    #rotate-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .rotate-gif {
+      width: 60%;
+      max-width: 280px;
+      border-radius: 24px;
+      box-shadow: 0 0 30px var(--violet);
+    }
+
+    .rotate-text {
+      margin-top: 24px;
+      font-size: 2rem;
+      text-align: center;
+      text-shadow: 0 0 15px var(--violet);
+    }
+
+    /* Основной контент */
+    #main-content {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 1.5s;
+    }
+
+    #main-content.visible {
+      opacity: 1;
+    }
+
+    /* Падающий текст */
+    .falling-text {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .falling-text span {
+      position: absolute;
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--violet);
+      text-shadow: 0 0 20px white, 0 0 40px var(--bright-violet);
+      white-space: nowrap;
+      animation: fall 18s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes fall {
+      0%   { transform: translateY(-150%) rotate(-10deg); }
+      100% { transform: translateY(150%) rotate(10deg); }
+    }
+
+    /* Отсчёт 3-2-1 */
+    #countdown {
+      font-size: 14rem;
+      font-weight: 900;
+      color: var(--bright-violet);
+      text-shadow: 0 0 50px white, 0 0 100px var(--violet);
+      opacity: 0;
+      transform: scale(0.6);
+      transition: all 0.9s;
+    }
+
+    #countdown.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Слова по очереди */
+    .word {
+      position: absolute;
+      font-size: 5.5rem;
+      font-weight: bold;
+      opacity: 0;
+      transform: translateY(60px);
+      transition: all 1.4s ease-out;
+      text-shadow: 0 0 35px var(--violet);
+    }
+
+    .word.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #big-heart-symbol {
+      font-size: 14rem;
+      opacity: 0;
+      transition: all 1.8s;
+    }
+
+    #big-heart-symbol.visible {
+      opacity: 1;
+    }
+
+    /* Гифка поздравления */
+    #congrats-gif {
+      width: 75%;
+      max-width: 380px;
+      border-radius: 24px;
+      box-shadow: 0 0 50px var(--violet);
+      opacity: 0;
+      transform: scale(0.85);
+      transition: all 1.4s;
+      margin: 40px 0;
+    }
+
+    #congrats-gif.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Открытка */
+    #postcard {
+      width: 92%;
+      max-width: 400px;
+      height: 520px;
+      perspective: 1200px;
+      margin: 30px auto;
+      opacity: 0;
+      transition: opacity 1.2s 0.8s;
+    }
+
+    #postcard.visible {
+      opacity: 1;
+    }
+
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 1.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      cursor: pointer;
+    }
+
+    .card.open {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 12px 50px rgba(0,0,0,0.6);
+    }
+
+    .front {
+      background: linear-gradient(135deg, var(--violet), var(--bright-violet));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4.5rem;
+      font-weight: bold;
+      text-shadow: 0 0 25px white;
+    }
+
+    .back {
+      transform: rotateY(180deg);
+      background: #fff;
+    }
+
+    .photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .bubble {
+      position: absolute;
+      top: 8%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.92);
+      color: var(--dark-violet);
+      padding: 16px 28px;
+      border-radius: 40px;
+      font-size: 1.5rem;
+      max-width: 85%;
+      text-align: center;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.35);
+      opacity: 0;
+      transition: opacity 1s;
+      pointer-events: none;
+    }
+
+    .bubble.visible {
+      opacity: 1;
+    }
+
+    /* Финальное сердце из фото */
+    #final-heart-container {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.75);
+      opacity: 0;
+      transition: opacity 2.5s 1s;
+      z-index: 20;
+    }
+
+    #final-heart-container.visible {
+      opacity: 1;
+    }
+
+    .heart-from-photo {
+      width: 85vmin;
+      height: 85vmin;
+      background-size: cover;
+      background-position: center;
+      clip-path: polygon(50% 0%, 100% 25%, 85% 60%, 70% 90%, 50% 100%, 30% 90%, 15% 60%, 0% 25%);
+      box-shadow: 0 0 80px var(--bright-violet), 0 0 160px var(--violet);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. Переверни телефон -->
+  <div id="rotate-screen">
+    <img class="rotate-gif" src="gif-rotate.gif" alt="Переверни телефон">
+    <div class="rotate-text">Переверни телефон, пожалуйста 💜</div>
+  </div>
+
+  <!-- Основной контент -->
+  <div id="main-content">
+
+    <!-- Падающие надписи -->
+    <div class="falling-text" id="falling"></div>
+
+    <!-- Отсчёт -->
+    <div id="countdown">3</div>
+
+    <!-- Слова -->
+    <div class="word" id="word1">С</div>
+    <div class="word" id="word2">Праздником</div>
+    <div class="word" id="word3">Родная</div>
+    <div id="big-heart-symbol">💜</div>
+
+    <!-- Гифка с поздравлением -->
+    <img id="congrats-gif" src="gif-congrats.gif" alt="Поздравление">
+
+    <!-- Открытка -->
+    <div id="postcard">
+      <div class="card" id="card">
+        <div class="card-face front">Открывай! 🎀</div>
+        <div class="card-face back">
+          <img class="photo" src="photo1.jpg" alt="Фото 1">
+          <div class="bubble" id="bubble1">Текст к первой фотографии</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Финальное сердце из твоего фото -->
+  <div id="final-heart-container">
+    <div class="heart-from-photo" style="background-image: url('heart-photo.jpg');"></div>
+  </div>
+
+  <script>
+    const rotateScreen = document.getElementById('rotate-screen');
+    const mainContent = document.getElementById('main-content');
+    const falling = document.getElementById('falling');
+    const countdown = document.getElementById('countdown');
+    const words = [
+      document.getElementById('word1'),
+      document.getElementById('word2'),
+      document.getElementById('word3')
+    ];
+    const bigHeart = document.getElementById('big-heart-symbol');
+    const congratsGif = document.getElementById('congrats-gif');
+    const postcard = document.getElementById('postcard');
+    const card = document.getElementById('card');
+    const finalHeart = document.getElementById('final-heart-container');
+
+    let currentPhotoIndex = 1;
+    const totalPhotos = 3; // измени, если у тебя больше/меньше фото
+
+    // Создаём падающие надписи
+    function createFallingText() {
+      const texts = ["С 8 МАРТА!!!", "ПРАЗДНИК!", "ЛЮБЛЮ ТЕБЯ!", "СЧАСТЬЯ!", "КРАСОТКА!"];
+      for (let i = 0; i < 30; i++) {
+        const span = document.createElement('span');
+        span.textContent = texts[Math.floor(Math.random() * texts.length)];
+        span.style.left = Math.random() * 100 + 'vw';
+        span.style.animationDelay = Math.random() * 10 + 's';
+        span.style.animationDuration = (12 + Math.random() * 12) + 's';
+        falling.appendChild(span);
+      }
+    }
+
+    // Показываем основной контент
+    function startMainAnimation() {
+      rotateScreen.classList.add('hidden');
+      mainContent.classList.add('visible');
+      createFallingText();
+
+      // Отсчёт 3-2-1
+      setTimeout(() => {
+        countdown.textContent = '3';
+        countdown.classList.add('visible');
+      }, 1500);
+
+      setTimeout(() => {
+        countdown.textContent = '2';
+      }, 2500);
+
+      setTimeout(() => {
+        countdown.textContent = '1';
+      }, 3500);
+
+      setTimeout(() => {
+        countdown.classList.remove('visible');
+      }, 4500);
+
+      // Слова по очереди
+      setTimeout(() => words[0].classList.add('visible'), 5000);
+      setTimeout(() => words[1].classList.add('visible'), 7000);
+      setTimeout(() => words[2].classList.add('visible'), 9000);
+      setTimeout(() => bigHeart.classList.add('visible'), 11000);
+
+      // Гифка
+      setTimeout(() => congratsGif.classList.add('visible'), 13000);
+
+      // Открытка
+      setTimeout(() => postcard.classList.add('visible'), 16000);
+    }
+
+    // Запуск после поворота или через время
+    function handleOrientation() {
+      if (window.matchMedia("(orientation: landscape)").matches || window.innerWidth > window.innerHeight) {
+        startMainAnimation();
+      }
+    }
+
+    window.addEventListener('orientationchange', handleOrientation);
+    window.addEventListener('resize', handleOrientation);
+
+    // Если не поворачивают — запускаем через 9 секунд
+    setTimeout(() => {
+      if (!mainContent.classList.contains('visible')) {
+        startMainAnimation();
+      }
+    }, 9000);
+
+    // Открытие открытки и свайпы
+    let touchStartX = 0;
+
+    card.addEventListener('click', () => {
+      card.classList.toggle('open');
+      if (card.classList.contains('open')) {
+        document.getElementById('bubble1').classList.add('visible');
+      }
+    });
+
+    // Свайп влево → следующее фото
+    postcard.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    postcard.addEventListener('touchend', e => {
+      const touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 60 && card.classList.contains('open')) {
+        // свайп влево
+        currentPhotoIndex++;
+        if (currentPhotoIndex > totalPhotos) {
+          // заканчиваем — показываем финальное сердце
+          postcard.style.opacity = '0';
+          setTimeout(() => {
+            postcard.style.display = 'none';
+            finalHeart.classList.add('visible');
+          }, 800);
+        } else {
+          // меняем фото и текст
+          const photo = postcard.querySelector('.photo');
+          photo.src = `photo${currentPhotoIndex}.jpg`;
+
+          const bubble = document.getElementById('bubble1');
+          bubble.classList.remove('visible');
+          bubble.textContent = `Текст к фото №${currentPhotoIndex}`; // ← замени на свои тексты
+          setTimeout(() => bubble.classList.add('visible'), 300);
+        }
+      }
+    });
+
+    // Для ПК — клик по открытке тоже переключает (опционально)
+    postcard.addEventListener('click', e => {
+      if (card.classList.contains('open') && e.target.closest('.card')) {
+        currentPhotoIndex++;
+        if (currentPhotoIndex > totalPhotos) {
+          postcard.style.opacity = '0';
+          setTimeout(() => {
+            postcard.style.display = 'none';
+            finalHeart.classList.add('visible');
+          }, 800);
+        } else {
+          const photo = postcard.querySelector('.photo');
+          photo.src = `photo${currentPhotoIndex}.jpg`;
+
+          const bubble = document.getElementById('bubble1');
+          bubble.classList.remove('visible');
+          bubble.textContent = `Текст к фото №${currentPhotoIndex}`;
+          setTimeout(() => bubble.classList.add('visible'), 300);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
